@@ -1,0 +1,80 @@
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../node_modules/animate.css/animate.css";
+
+//El color de la barra lo cambiamos de linght a indigo*/
+$indigo-500: $green-500;
+
+/*cambiamos el color al boton para que se bea en gris y cuando pasamos por encima sea blanco*/
+
+.bi,.card,.nav-link{
+  color:$gray-400 !important;
+}
+.bi:hover,.nav-link:hover,.card-body:hover{
+  color:white !important;
+}
+
+/*Quitamos el borde al boton*/
+.navbar-toggler:focus, .navbar-toggler:active{
+  outline: none;
+  box-shadow: none;
+}
+
+.btn-outline-light:hover,.btn-outline-light:focus{
+  background-color: transparent !important;
+}
+
+.bg-light,{
+  background-color: $indigo-500 !important;
+}
+.card-header,.card-body{
+  background-color: $indigo-500 !important;
+}
+.btn-outline-primary,.border{
+  color: $indigo-500 !important;
+  border-color: $indigo-500 !important;
+}
+.btn-outline-primary:hover,.btn-outline-primary:focus, li:hover {
+  background-color: $indigo-500 !important;
+  color:white !important;
+}
+input::placeholder,input,.form-select{
+  border-color: $indigo-500 !important;
+  color: $indigo-500 !important;
+
+}
+input:focus,.form-select:focus{
+  box-shadow:0 0 0 0.15rem $indigo-500 !important;
+}
+
+.btn-secondary{
+  background-color: $indigo-500 !important;
+}
+.btn-secondary:hover{
+  background-color: $green-600 !important;
+}
+h1{
+  color:$indigo-500 !important;
+  font-family: "Arial Black";
+}
+.form-label,{
+  color:$indigo-500 !important;
+}
+.btn-outline-success{
+  background-color: $indigo-500 !important;
+  color : $gray-400 !important;
+  border-color: $gray-400 !important;
+}
+.btn-outline-success:hover{
+  background-color: white !important;
+  color:$indigo-500 !important;
+}
+.table-bordered, .table-striped, .table-light{
+  border: 3px solid $indigo-500 !important;
+}
+tr:hover{
+  background-color: $indigo-500 !important;
+}
+.form-control::placeholder{
+  color:$indigo-500 !important;
+  opacity: 100%;
+}
