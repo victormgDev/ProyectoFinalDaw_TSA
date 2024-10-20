@@ -12,6 +12,7 @@ $conn = crearConexion();
     </div>
   </div>
 </div>
+<script src="/appTsa/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 <?php
 include 'templates/footer.php';
 ?>

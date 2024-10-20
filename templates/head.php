@@ -40,7 +40,7 @@ session_start();
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-item" href="/appTsa/modeloControlador/controlador.php?accion=cerrarSesion">
+            <a class="nav-link" href="/appTsa/modeloControlador/controlador.php?accion=cerrarSesion">
               <i class="bi bi-box-arrow-left"> Cerrar Sesion</i>
             </a>
           </li>

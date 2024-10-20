@@ -174,7 +174,7 @@ function detalleAvion(){
       $row = $result->fetch_assoc();
 
       echo '<h2>'.htmlspecialchars($row['fabricante']).' - '.htmlspecialchars($row['modelo']).'</h2>';
-      echo '<img src="' . htmlspecialchars($row["imagen_url"]) . '" class="img-fluid" alt="imagen avión">';
+      echo '<img src="' . htmlspecialchars($row["imagen_url"]) . '" class="img-fluid rounded-3" alt="imagen avión">';
       echo '<div id="divDescripcion">';
       echo '<p>Descripcion: '.htmlspecialchars($row["descripcion"]).'</p>';
       echo '</div>';
