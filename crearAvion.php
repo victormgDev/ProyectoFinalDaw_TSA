@@ -37,4 +37,7 @@ include "modeloControlador/controlador.php"; //incluimos el modelo para poder cr
   </div>
 
 </div>
-<?php include 'templates/footer.php'; ?>
+<footer>
+  <?php include 'templates/footer.php'; ?>
+</footer>
+
