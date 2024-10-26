@@ -43,7 +43,12 @@ function iniciarSesion(){
       if (data.includes('div class="col-9 alert alert-success text-center" role="alert">Bienvenido al sistema</div>')) {  // Suponiendo que el servidor devuelve este mensaje
         // Redirigir a index.php
         window.location.href = '/appTsa/index.php';
-      }else{
+      }else if (data.includes('<div class="alert alert-success text-center">Ha iniciado sesion como Adminsitrador</div>')) {
+        document.querySelector('#alertFormIniciarSesion').innerHTML = data;
+        setTimeout(function (){
+          window.location.href = '/appTsa/indexAdmin.php';
+        }, 2000);
+      }else {
         document.querySelector('#alertFormIniciarSesion').innerHTML = data;
       }
     })
@@ -68,10 +73,45 @@ function registrarUsuario(usuario,email,password){
     .then(response =>response.text())
     .then(data => {
       document.querySelector('#alertRegistro').innerHTML = data;
+      setTimeout(function (){
+        window.location.href = '/appTsa/login.php'
+      },1500);
     })
     .catch(error => {
       document.querySelector('#alertRegistro').innerHTML = data;
     })
+}
+
+//Funcion para buscarDescripcion de Aviones
+function buscarDescripcion(){
+const fabricante = document.getElementById('fabricante').value;
+const modelo = document.getElementById('modelo').value;
+const descripcionContenedor = document.getElementById('descripcionAvion').value;
+
+if (!fabricante || !modelo){
+  descripcionContenedor.innerHTML= "<p class='text-warning'>Completa el Fabricante y Modelo. </p>";
+  return;
+}
+fetch('modeloControlador/controlador.php', {
+  method: 'POST',
+  headers:{
+    'content-type': 'application/x-www-form-urlencoded',
+  },
+  body: new URLSearchParams({
+    fabricante: fabricante,
+    modelo: modelo,
+    descripcionContenedor: descripcionContenedor,
+    action: 'buscarDescripcion',
+  })
+})
+  .then(response =>response.text())
+  .then(data => {
+    descripcionContenedor.innerHTML=data;
+  })
+  .catch(error => {
+    console.error('Error al buscar la descripcion', error);
+    descripcionContenedor.innerHTML='<p class="text-danger">Error al obtener la descripcion</p>';
+  });
 }
 
 //Funcion para crear Aviones y añadir a la base de datos
@@ -89,6 +129,9 @@ function crearAvion(){
     .then(response =>response.text())
     .then(data => {
       document.querySelector('#alertCrearAvion').innerHTML = data;
+      setTimeout(function (){
+        window.location.href = '/appTsa/enciclopedia.php'
+      }, 1500);
     })
     .catch(error => {
       console.error('Error al crear Avion', error);
@@ -146,8 +189,7 @@ function editarAvion(idAvion){
 //Funcion para mostrar mapa en vueloActual.php
 var map; // variable map para que este al alcance de la funcion  marcadorAvion
 function mostrarMapa(){
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl4vk039FPjcdPlIDjZ3dQutSH_bMnuqI";
-
+ src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCl4vk039FPjcdPlIDjZ3dQutSH_bMnuqI";
   function initMap() {
     var location = { lat: 40.416775, lng: -3.703790 }; // Coordenadas de Madrid
     map = new google.maps.Map(document.getElementById("map"), {
@@ -365,7 +407,7 @@ function editarMiCuenta(idUsuario){
 }
 
 //Funcion para hacer Login como Administrador en la pagina logAdmin.php
-function iniciarSesionAdmin(event){
+/*function iniciarSesionAdmin(event){
   event.preventDefault();
   console.log('funciona el boton');
 
@@ -379,8 +421,8 @@ function iniciarSesionAdmin(event){
   })
     .then(response =>response.text())
     .then(data => {
-      if (data.includes('<div class="alert alert-success">Ha iniciado sesion como Adminsitrador</div>')){
-        window.location.href = 'indexAdmin.php';
+      if (data.includes('<div class="alert alert-success text-center">Ha iniciado sesion como Adminsitrador</div>')){
+        window.location.href = '/indexAdmin.php';
       }else{
         document.querySelector('#divCambiarPasword').innerHTML = data;
 
@@ -389,7 +431,7 @@ function iniciarSesionAdmin(event){
     .catch(error => {
       console.error('Error al login Admin', error);
     })
-}
+}*/
 
 //Funcion para cambiar la contraseña del usuario admin
 function cambiarPasswordAdmin(idAdmin){
@@ -421,7 +463,20 @@ function cambiarPasswordAdmin(idAdmin){
 
 //Funcion para eliminar usuario desde indexAdmin
 function eliminarUsuario(idUsuario){
-  if (confirm("Estas seguro de eliminar el usuario?")) {
+  var boton = document.getElementById('btnEliminarUsuario');
+  var spinner = document.getElementById('spinnerUsuario');
+  $('#confirmModal').modal('show');
+  document.getElementById('cancelarEliminar').addEventListener('click', function (){
+    $('#confirmModal').modal('hide');
+  })
+  document.getElementById('btnCerrarModal').addEventListener('click', function (){
+    $('#confirmModal').modal('hide');
+  })
+
+  document.getElementById('confirmarEliminar').addEventListener('click',function (){
+    $('#confirmModal').modal('hide');
+    boton.disabled=true;
+    spinner.classList.remove('d-none');
     fetch('modeloControlador/controladorAdmin.php', {
       method: 'POST',
       body: new URLSearchParams({
@@ -431,13 +486,17 @@ function eliminarUsuario(idUsuario){
     })
       .then(response =>response.text())
       .then(data => {
-        alert(data);
-        location.reload();
+        document.querySelector('#alertUsuariosMostrados').innerHTML=data;
+        setTimeout(function (){
+          location.reload();
+        }, 3500);
       })
       .catch(error => {
         console.error('Error al eliminar el usuario', error);
-      })
-  }
+        boton.disabled=false;
+        spinner.classList.add('d-none');
+      });
+  });
 }
 
 //Funcion para modificar el avion que nso redirige a la pagina de editar avion
@@ -447,7 +506,20 @@ function modificarAvion(id){
 
 //Funcion para eliminar el Avion desde Admin
 function eliminarAvion(idAvion){
-  if (confirm("Estas seguro de eliminar el Avion?")) {
+  var boton =  document.getElementById('btnEliminarAvion');
+  var spinner =  document.getElementById('spinnerAvion');
+  $('#confirmModal').modal('show');
+  document.getElementById('cancelarEliminar').addEventListener('click', function (){
+    $('#confirmModal').modal('hide');
+  })
+  document.getElementById('btnCerrarModal').addEventListener('click', function (){
+    $('#confirmModal').modal('hide');
+  })
+
+  document.getElementById('confirmarEliminar').addEventListener('click',function (){
+    $('#confirmModal').modal('hide');
+    boton.disabled=true;
+    spinner.classList.remove('d-none');
     fetch('modeloControlador/controladorAdmin.php', {
       method: 'POST',
       body: new URLSearchParams({
@@ -457,11 +529,76 @@ function eliminarAvion(idAvion){
     })
       .then(response =>response.text())
       .then(data => {
-        alert(data);
-        location.reload();
+        document.querySelector('#alertAvionesMostrados').innerHTML= data
+        setTimeout(function (){
+          location.reload();
+        }, 3500);
       })
       .catch(error => {
         console.error('Error al eliminar el usuario', error);
+        boton.disabled=false;
+        spinner.classList.add('d-none');
+      });
+  });
+}
+
+//Funcion para eliminar Busquedas
+function eliminarBusqueda(idBusqueda){
+  var boton = document.getElementById('btnEliminarBusqueda');
+  var spinner = document.getElementById('spinner');
+  $('#confirmModal').modal('show');
+  document.getElementById('cancelarEliminar').addEventListener('click', function (){
+    $('#confirmModal').modal('hide');
+  })
+  document.getElementById('btnCerrarModal').addEventListener('click', function (){
+    $('#confirmModal').modal('hide');
+  })
+
+  document.getElementById('confirmarEliminar').addEventListener('click',function (){
+    $('#confirmModal').modal('hide');
+    boton.disabled=true;
+    spinner.classList.remove('d-none');
+    fetch('modeloControlador/controladorAdmin.php', {
+      method: 'POST',
+      body: new URLSearchParams({
+        'idBusqueda': idBusqueda,
+        'action': 'eliminarBusqueda'
+      })
+    })
+      .then(response =>response.text())
+      .then(data => {
+        document.querySelector('#alertBusquedasMostradas').innerHTML = data;
+        setTimeout(function (){
+          location.reload();
+        }, 3500);
+
+      })
+      .catch(error => {
+        console.error('Error al eliminar la busqueda', error);
+        boton.disabled=false;
+        spinner.classList.add('d-none');
+      });
+  });
+}
+//Funcion para eliminar todas las busquedas
+function eliminarTotalBusquedas(){
+  console.log('funciona el boton');
+  if (confirm("¿Estas seguro de eliminar todas las busquedas?")) {
+    fetch('modeloControlador/modeloAdmin.php', {
+      method: 'POST',
+      body: new URLSearchParams({
+        'action': 'eliminarTotalBusquedas'
+      })
+    })
+      .then(response =>response.text())
+      .then(data => {
+        document.querySelector('#alertBusquedasMostradas').innerHTML = data;
+        setTimeout(function (){
+          location.reload();
+        }, 3500);
+      })
+      .catch(error => {
+        console.error('Error al eliminar la busqueda', error);
       })
   }
 }

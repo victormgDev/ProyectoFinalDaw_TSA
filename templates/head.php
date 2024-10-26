@@ -25,7 +25,6 @@ session_start();
       </svg>
     </button>
 
-
     <div class="collapse navbar-collapse " id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-2">
 
@@ -77,9 +76,6 @@ session_start();
         <?php else: ?>
           <li class="nav-item">
             <a class="nav-link" href="/appTsa/login.php">Iniciar Sesión</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/appTsa/logAdmin.php">Iniciar Sesión Admin</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/appTsa/enciclopedia.php">Enciclopedia de Aviones</a>

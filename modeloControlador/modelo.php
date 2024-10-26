@@ -38,12 +38,50 @@ function iniciarSesion ($email, $password){
       exit();
     }else{
       echo '<div class="col-9 alert alert-warning text-center">Contraseña Incorrecta</div>';
+      exit();
     }
   }else {
-    echo '<div class="col-9 alert alert-danger text-center">Usuario no encontrado</div>';
+    $connAdmin = crearConexion();
+    $sql = "SELECT * FROM usuario_admin WHERE email=?";
+    $stmt = $connAdmin->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+      $row = $result->fetch_assoc();
+      if ($password === $row['password'] || password_verify($password, $row['password'])) {
+        session_start();
+        $_SESSION['idAdmin'] = $row['id'];
+        $idAdmin = $row['id'];
+        $_SESSION['admin'] = $row['usuario'];
+        $_SESSION['emailAdmin'] = $row['email'];
+
+        if ($row['password_cambiada'] == 0) {
+          //header('Location: indexAdmin.php' );
+          $formulario = '
+                <form id="formCambiarPassword" method="POST" onsubmit="cambiarPasswordAdmin(' . $idAdmin . ')"  aria-label="Formulario para Iniciar Sesion como Admin">
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control mt-3" id="cambioPasswordAdmin" name="cambioPasswordAdmin" placeholder="Contraseña" required>
+                    <label for="cambioPasswordAdmin" class="form-label">Contraseña</label>
+                </div>
+                <button type="submit" class="btn btn-outline-primary mb-3" >Guardar Cambios</button>
+            </form>
+            <div id="alertCambioPass"></div>';
+          echo $formulario;
+
+        } else {
+          echo '<div class="alert alert-success text-center">Ha iniciado sesion como Adminsitrador</div>';
+        }
+      } else {
+        echo '<div class="alert alert-warning">La Contraseña no coincide</div>';
+      }
+    } else {
+      echo '<div class="alert alert-warning">Usuario no encontrado</div>';
+    }
+    $stmt->close();
+    $conn->close();
   }
-  $conn->close();
-  $stmt->close();
 }
 
 //Funcion para registrar usuario en la BD
@@ -260,7 +298,6 @@ function autocompletarDestino($autoCompletar){
   exit();
 }
 
-
 //Funcion para mostrar las rutas en la pagina vuelo actual
 function mostrarRutas($origen, $destino){
   $conn=crearConexion();
@@ -413,6 +450,30 @@ function guardarIata($idUsuario, $origen,$destino ){
     return false;
   }
 }
+//Funcion para Guardar la busqueda sin mostrar en el mapa de Admin
+function guardarIataAdmin($idAdmin, $origen,$destino ){
+  $conn=crearConexion();
+  $sql = "INSERT INTO busquedas (id_admin, iata_origen, iata_destino) VALUES (?,?,?)";
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param('iss',$idAdmin,$origen,$destino);
+  $stmt->execute();
+
+  if ($stmt->affected_rows > 0) {
+    echo '<div class="col-9 mt-3 alert alert-success text-center">
+                Busqueda Guardada Correctamente
+              </div>';
+    $conn->close();
+    $stmt->close();
+    return true;
+  }else{
+    echo '<div class="col-9 mt-3 alert alert-danger text-center">
+                Error al guardar la busqueda
+                </div>';
+    $conn->close();
+    $stmt->close();
+    return false;
+  }
+}
 
 // Funcion para guardar la busqueda de ruta
 function guardarBusqueda($idUsuario, $origen, $destino, $modeloAvion){
@@ -445,8 +506,16 @@ function guardarBusqueda($idUsuario, $origen, $destino, $modeloAvion){
   }else {
     echo 'No se encontraron resultados';
   }
+  session_start();
+  if (isset($_SESSION['idAdmin'])){
+    echo '<div class="col-9 mt-3 alert alert-success text-center">'.$idUsuario. 'id del admin </div>';
+    $sql1 = "INSERT INTO busquedas (id_admin,id_aeropuerto_origen, iata_origen, origen, id_aeropuerto_destino, iata_destino, destino, modelo_avion, mostrado_mapa) VALUES (?,?,?,?,?,?,?,?,?)";
+
+  }else{
+    $sql1 = "INSERT INTO busquedas (id_usuario,id_aeropuerto_origen, iata_origen, origen, id_aeropuerto_destino, iata_destino, destino, modelo_avion, mostrado_mapa) VALUES (?,?,?,?,?,?,?,?,?)";
+
+  }
   //Sentencia SQL insert
-  $sql1 = "INSERT INTO busquedas (id_usuario,id_aeropuerto_origen, iata_origen, origen, id_aeropuerto_destino, iata_destino, destino, modelo_avion, mostrado_mapa) VALUES (?,?,?,?,?,?,?,?,?)";
   $stmt1=$conn->prepare($sql1);
   $stmt1->bind_param("iississss",$idUsuario,$idAeropuertoOrigen,$origen, $ciudadOrigen,$idAeropuertoDestino,$destino,$ciudadDestino,$modeloAvion, $mostradoMapa);
   $stmt1->execute();

@@ -31,6 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
   eliminarAvion($idAvion);
 }
 
+//Funcion para eliminar la busqueda
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'eliminarBusqueda') {
+  $idBusqueda = $_POST['idBusqueda'];
+  eliminarBusqueda($idBusqueda);
+}
+
 //Aqui recibimos los datos del formulario para editar los datos de mi cuenta
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])&& $_POST['action'] === 'editarMiCuentaAdmin') {
   $conn = crearConexion();
@@ -45,5 +51,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])&& $_POST['a
   }
 }
 
-?>;
+?>
 

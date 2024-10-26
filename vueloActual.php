@@ -72,4 +72,5 @@ if ($idUsuario = existeUsuario()) {
   <?php
   include 'templates/footer.php';
   ?>
+
 </footer>

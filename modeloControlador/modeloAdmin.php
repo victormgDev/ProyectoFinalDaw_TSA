@@ -15,7 +15,7 @@ function cerrarConexion($connexion){
 }
 
 //Funcion para iniciar Sesion como Admin
-function iniciarSesionAdmin($emailAdmin, $passwordAdmin){
+/*function iniciarSesionAdmin($emailAdmin, $passwordAdmin){
   $conn=crearConexion();
   $sql= "SELECT * FROM usuario_admin WHERE email=?";
   $stmt=$conn->prepare($sql);
@@ -56,7 +56,7 @@ function iniciarSesionAdmin($emailAdmin, $passwordAdmin){
   }
   $stmt->close();
   $conn->close();
-}
+}*/
 
 //Funcion para cambiar el Password del Admin
 function cambiarPasswordAdmin($idAdmin, $nuevoPasswordAdmin){
@@ -93,7 +93,10 @@ function mostrarUsuarios(){
               <td>" .$row['usuario'].  "</td>
               <td>" .$row['email'].  "</td>
               <td>
-                <button class='btn btn-danger' onclick='eliminarUsuario(".$row['id'].")'>Eliminar</button>
+                <button id='btnEliminarUsuario' class='btn btn-danger' onclick='eliminarUsuario(".$row['id'].")'>
+                <span id='spinnerUsuario' class='spinner-border spinner-border-sm d-none'></span>
+                 Eliminar
+                 </button>
               </td>
               </tr>";
     }
@@ -109,9 +112,9 @@ function eliminarUsuario($idUsuario){
   $stmt= $conn->prepare($sql);
   $stmt->bind_param('i', $idUsuario);
   if ($stmt->execute()){
-    echo 'Usuario eliminado Correctamente';
+    echo '<div class="alert alert-success text-center">Usuario eliminado correctamente</div>';
   }else {
-    echo 'Error al eliminar Usuario';
+    echo '<div class="alert alert-warning text-center">No se ha podido eliminar el usuario</div>';
   }
   $stmt->close();
   $conn->close();
@@ -137,7 +140,10 @@ function mostrarAvionesAdmin(){
               <td>" .$row['modelo'].  "</td>
               <td>
                 <button class='btn btn-warning' onclick='modificarAvion(".$row['id'].")'>Modificar</button>
-                <button class='btn btn-danger ' onclick='eliminarAvion(".$row['id'].")'>Eliminar</button>
+                <button id='btnEliminarAvion' class='btn btn-danger ' onclick='eliminarAvion(".$row['id'].")'>
+                <span id='spinnerAvion' class='spinner-border spinner-border-sm d-none'></span>
+                Eliminar
+                </button>
               </td>
               </tr>";
     }
@@ -153,9 +159,9 @@ function eliminarAvion($idAvion){
   $stmt= $conn->prepare($sql);
   $stmt->bind_param('i', $idAvion);
   if ($stmt->execute()){
-    echo 'Usuario eliminado Correctamente';
+    echo '<div class="alert alert-success text-center">Avion eliminado correctamente</div>';
   }else {
-    echo 'Error al eliminar Usuario';
+    echo '<div class="alert alert-warning text-center">No se ha podido eliminar el avion</div>';
   }
   $stmt->close();
   $conn->close();
@@ -164,8 +170,8 @@ function eliminarAvion($idAvion){
 //Funcion para mostrar las busquedas en la pagina Admin
 function mostrarBusquedasAdmin(){
   $conn=crearConexion();
-  $sql="SELECT busquedas.id_usuario, usuarios.usuario, busquedas.id_busquedas, busquedas.iata_origen, busquedas.origen, busquedas.iata_destino, busquedas.destino, busquedas.modelo_avion
-  from busquedas join usuarios on busquedas.id_usuario=usuarios.id where busquedas.mostrado_mapa = 'SI'";
+  $sql="SELECT busquedas.id_usuario, busquedas.id_admin, COALESCE(usuario_admin.usuario, usuarios.usuario) as usuario , busquedas.id_busquedas, busquedas.iata_origen, busquedas.origen, busquedas.iata_destino, busquedas.destino, busquedas.modelo_avion
+  from busquedas left join usuarios on busquedas.id_usuario=usuarios.id left join usuario_admin on busquedas.id_admin = usuario_admin.id where busquedas.mostrado_mapa = 'SI'";
 
   $contadorFila = 0;
   $stmt= $conn->prepare($sql);
@@ -176,7 +182,7 @@ function mostrarBusquedasAdmin(){
       $contadorFila++;
       echo "<tr>
               <th scope='row'>".$contadorFila."</th>
-              <td>" .$row['id_usuario'].  "</td>
+              <td>" .$row['id_usuario']. $row['id_admin']. "</td>
               <td>" .$row['usuario'].  "</td>
               <td>" .$row['id_busquedas'].  "</td>
               <td>" .$row['iata_origen'].  "</td>
@@ -185,13 +191,43 @@ function mostrarBusquedasAdmin(){
               <td>" .$row['destino'].  "</td>
               <td>" .$row['modelo_avion'].  "</td>
               <td>
-
+                <button id='btnEliminarBusqueda' class='btn btn-danger' onclick='eliminarBusqueda(".$row['id_busquedas'].")'>
+                <span id='spinner' class='spinner-border spinner-border-sm d-none'></span>
+                Eliminar
+                </button>
               </td>
               </tr>";
     }
   }
   $stmt->close();
   $conn->close();
+}
+
+//Funcion para eliminar las busquedas de la base de datos
+function eliminarBusqueda($idBusqueda){
+  $conn=crearConexion();
+  $sql = "DELETE FROM busquedas WHERE id_busquedas = ?";
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param('i', $idBusqueda);
+  if ($stmt->execute()){
+    echo '<div class="alert alert-success text-center">Busqueda eliminada Correctamente</div>';
+  }else{
+    echo '<div class="alert alert-warning text-center">No se han podido eliminar la busqueda</div>';
+  }
+  $stmt->close();
+  $conn->close();
+}
+
+//Funcion para eliminar todas las busquedas
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'eliminarTotalBusquedas'){
+  $conn=crearConexion();
+  $sql = "DELETE FROM busquedas";
+  $stmt= $conn->prepare($sql);
+  if ($stmt->execute()) {
+    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">Busquedas eliminadas correctamente</div>';
+  }else{
+    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">Error al eliminar las Busquedas</div>';
+  }
 }
 
 //Funcion para mostrar datos de Cuenta Admin
@@ -238,7 +274,5 @@ function comprobarEmailAdmin($idAdmin, $usuario,$email, $password){
   }
 
 }
-
-
 
 ?>

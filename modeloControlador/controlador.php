@@ -39,7 +39,7 @@ function mostrarNoticias($urlRSS, $limite = 12){
 }
 
 //Aqui recibimos los datos de Iniciar Session para comprobar si existe el usuario
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])&& $_POST['action'] === 'iniciarSesion') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'iniciarSesion') {
   $email = $_POST['email'];
   $password = $_POST['password'];
 
@@ -53,6 +53,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
   $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
   registrarUsuario($usuario, $email, $password);
+}
+
+//Funcion para realizar la busqueda de la descripcion del avion
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'buscarDescripcion'){
+
 }
 
 //Funcion para crear Aviones y guardar en BD con los datos recibidos por AJAX de la funcion crearAviones
@@ -138,11 +143,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])&& $_POST['a
 
     }
     if (isset($_SESSION['admin'])) {
-      $idUsuario = $_SESSION['idAdmin'];
-      echo "<script>var idUsuario= $idUsuario</script>";
+      $idAdmin = $_SESSION['idAdmin'];
+      echo "<script>var idUsuario= $idAdmin</script>";
       $origen = $_POST['origen'];
       $destino = $_POST['destino'];
-      guardarIata($idUsuario, $origen, $destino);//Funcion definida en controlador.php para guardar las consultas de rutas
+      guardarIataAdmin($idAdmin, $origen, $destino);//Funcion definida en controlador.php para guardar las consultas de rutas
       mostrarRutas($origen, $destino);
     }
   }

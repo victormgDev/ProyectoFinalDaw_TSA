@@ -24,7 +24,7 @@ require 'modeloControlador/controlador.php';
       <?php
       //Si el usuario a iniciado sesion aparecera un boton para poder añadir mas aviones
       if (isset($_SESSION['usuario'])) {
-        echo "<a href='crearAvion.php' class='btn btn-outline-primary mb-3'>Añadir Avion</a>";
+        echo "<a href='avion.php' class='btn btn-outline-primary mb-3'>Añadir Avion</a>";
       }
       ?>
       <form id="formBusquedaAviones" method="post" class="d-flex">
