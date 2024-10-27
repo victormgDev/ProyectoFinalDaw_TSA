@@ -153,6 +153,46 @@ function crearAvion($fabricante, $modelo, $capacidad, $velMax, $autonomia, $desc
   }
 }
 
+//Funcion para guardar en la BD los datos del avion a crear
+function crearAvionBusqueda($fabricante, $modelo, $descripcion, $capacidad, $alcance, $velocidad){
+  $conn = crearConexion();
+  //Sentencia para comprobar si el modelo ya existe
+  $sql1 = "SELECT id FROM aviones WHERE modelo=?";
+  $stmt1 = $conn->prepare($sql1);
+  $stmt1->bind_param('s', $modelo);
+  $stmt1->execute();
+  $stmt1->store_result();//Aqui almacenamos los resultados
+  if ($stmt1->num_rows > 0){ //Comprobamos si existe el modelo
+    echo '<div class=" alert alert-danger text-center" role="alert">El avion ya existe</div>';
+  }else{
+    //Para subir la imagen
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+      $dirSubida = __DIR__ . "/../img/";
+      $nombreImagen = basename($_FILES['imagen']['name']);
+      $url = "http://localhost/appTsa/img/" . $nombreImagen;
+      $rutaImagen = $dirSubida . $nombreImagen;
+
+      //Movemos la imagen al directorio
+      if (move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaImagen)) {
+        //Consulta Sql
+        $sql= "INSERT INTO aviones (fabricante, modelo, capacidad, velocidad_maxima, autonomia, descripcion, imagen_url) values (?,?,?,?,?,?,?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssiiiss", $fabricante, $modelo, $capacidad, $velocidad, $alcance, $descripcion, $url);
+
+        if ($stmt->execute()) {
+          echo "<div class='alert alert-success text-center' role='alert'>Avion creado correctamente</div>";
+        }else {
+          echo "<div class='alert alert-danger text-center' role='alert'>Error al crear el avion</div>";
+        }
+      }else {
+        echo "<div class='alert alert-danger text-center' role='alert'>Error al subir la imagen</div>";
+      }
+    }else{
+      echo "<div class='alert alert-warning text-center' role='alert'>Desbes subir una imagen</div>";
+    }
+  }
+}
+
 //Funcion para msotrar los aviones en la pagina enciclopedia
 function mostrarAviones($consulta, $orden,$direccion){
   $conn = crearConexion();
@@ -214,10 +254,11 @@ function detalleAvion(){
       echo '<h2>'.htmlspecialchars($row['fabricante']).' - '.htmlspecialchars($row['modelo']).'</h2>';
       echo '<img src="' . htmlspecialchars($row["imagen_url"]) . '" class="img-fluid rounded-3" alt="imagen avión">';
       echo '<div id="divDescripcion">';
-      echo '<p>Descripcion: '.htmlspecialchars($row["descripcion"]).'</p>';
+      echo '<h3>Descripcion:</h3><p> '.htmlspecialchars($row["descripcion"]).'</p>';
       echo '</div>';
-      echo '<p>Capacidad: '.htmlspecialchars($row["capacidad"]).'</p>';
-      echo '<p>Velocidad Maxima: '.htmlspecialchars($row["velocidad_maxima"]).' km/h</p>';
+      echo '<h3>Informacion añadida</h3><p> '.htmlspecialchars($row['descripcion_modificada']) .'</p>';
+      echo '<h3>Capacidad:</h3><p>'.htmlspecialchars($row["capacidad"]).'</p>';
+      echo '<h3>Velocidad Maxima:</h3><p>'.htmlspecialchars($row["velocidad_maxima"]).' km/h</p>';
     }else{
       echo '<div class=" alert alert-danger text-center" role="alert">Avion no encontrado</div>';
     }
@@ -225,8 +266,8 @@ function detalleAvion(){
       echo '<div class="col-10 mt-0">';
       echo '<div class="row mb-3">';
       echo '<form id="formEditAvion" class="form-control" method="post">';
-      echo '<label for="editDescripcion" class="form-label">Editar Descripcion</label>';
-      echo '<textarea class="form-control" id="editDescripcion" name="editDescripcion" rows="5"></textarea>';
+      echo '<label for="editDescripcion" class="form-label">Editar Informacion Añadida</label>';
+      echo '<textarea class="form-control" id="editDescripcion" name="editDescripcion" rows="5">'.htmlspecialchars($row['descripcion_modificada']) .'</textarea>';
       echo '</div>';
       echo '<button type="submit" class="btn btn-outline-primary" id="editAvion" name="editAvion" onclick="editarAvion('.$_GET['id'].')">Guardar Cambios</button>';
       echo '</form>';
@@ -236,14 +277,14 @@ function detalleAvion(){
 }
 
 //Funcion para guardar la modificacion de editar avion
-function editarAvion($id1, $descripcion){
+function editarAvion($id1,$descripcion, $descripcionCompleta){
   $conn = crearConexion();
-  $sql1 = "UPDATE aviones SET descripcion = ? WHERE id=?";
+  $sql1 = "UPDATE aviones SET descripcion_modificada = ? WHERE id=?";
   $stmt1 = $conn->prepare($sql1);
   $stmt1->bind_param("si", $descripcion, $id1);
   if ($stmt1->execute()) {
     echo '<div class=" alert alert-success text-center" role="alert">Avion editado Correctamente</div>';
-    echo '<p>Descripcion: '.$descripcion.'</p>';
+    echo '<h3>Descripcion:</h3><p>Descripcion: '.$descripcionCompleta.'</p>';
   }else{
     echo '<div class=" alert alert-danger text-center" role="alert">Error al editar el avion</div>';
   }

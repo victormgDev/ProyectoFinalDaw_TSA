@@ -84,10 +84,12 @@ function registrarUsuario(usuario,email,password){
 
 //Funcion para buscarDescripcion de Aviones
 function buscarDescripcion(){
+  console.log("funciona el boton");
 const fabricante = document.getElementById('fabricante').value;
-const modelo = document.getElementById('modelo').value;
-const descripcionContenedor = document.getElementById('descripcionAvion').value;
+const modelo = document.getElementById('modelo').value.toUpperCase();
 
+const descripcionContenedor = document.getElementById('divDescripcionAvion');
+  console.log(fabricante, modelo );
 if (!fabricante || !modelo){
   descripcionContenedor.innerHTML= "<p class='text-warning'>Completa el Fabricante y Modelo. </p>";
   return;
@@ -138,6 +140,43 @@ function crearAvion(){
     })
 }
 
+//Funcion para crear el avion mostrado en la busqueda
+function crearAvionBusqueda(){
+  console.log("funciona el boton crearAvionBusqueda");
+  event.preventDefault();
+  const descripcion = document.getElementById('descripcionAvion').innerText;
+  const capacidad = document.getElementById('capacidadAvion').innerText || document.getElementById('capacidadManual').value;
+  const alcance = document.getElementById('alcanceAvion').innerText || document.getElementById('alcanceManual').value;
+  const velocidad = document.getElementById('velocidadAvion').innerText || document.getElementById('velocidadManual').value;
+
+  const capacidadNum = parseInt(capacidad.replace(/\D/g, ''), 10);
+  const alcanceNum = parseInt(alcance.replace(/\D/g, ''), 10);
+  const velocidadNum = parseInt(velocidad.replace(/\D/g, ''), 10);
+
+  let form= document.querySelector('#formCrearAvion');
+  let formDatos = new FormData(form);
+  formDatos.append('action', 'crearAvionBusqueda');
+  formDatos.append('descripcion', descripcion);
+  formDatos.append('capacidad', capacidadNum);
+  formDatos.append('alcance', alcanceNum)
+  formDatos.append('velocidad', velocidadNum);
+
+  fetch('modeloControlador/controlador.php', {
+    method: 'POST',
+    body: formDatos
+  })
+    .then(response =>response.text())
+    .then(data => {
+      document.querySelector('#alertCrearAvion').innerHTML = data;
+      setTimeout(function (){
+        window.location.href = '/appTsa/enciclopedia.php'
+      }, 1500);
+    })
+    .catch(error => {
+      console.error('Error al crear Avion', error);
+    })
+}
+
 //Funcion para mostrar aviones con datos recibidos de enciclopedia.php y enviamos datos a controlador.php para que nos devuelva la informacion
 function mostrarAviones() {
   event.preventDefault();
@@ -166,18 +205,23 @@ function mostrarAviones() {
 function editarAvion(idAvion){
   console.log(idAvion);
   event.preventDefault();
+  const descripcionGuardada = document.getElementById('divDescripcion').innerText;
   let form =document.querySelector('#formEditAvion');
 
   let formDatos = new FormData(form);
   console.log(formDatos);
   formDatos.append('action', 'editarAvion');
   formDatos.append('idAvion', idAvion);
+  formDatos.append('descripcionGuardada', descripcionGuardada);
   fetch('modeloControlador/controlador.php', {
     method: 'POST',
     body: formDatos,
   })
     .then(response =>response.text())
     .then(data => {
+      setTimeout(function (){
+        location.reload();
+      }, 1500);
       console.log(data)
       document.querySelector('#divDescripcion').innerHTML = data;
     })

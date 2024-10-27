@@ -57,7 +57,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 //Funcion para realizar la busqueda de la descripcion del avion
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'buscarDescripcion'){
+$fabricante = $_POST['fabricante'];
+$modelo = $_POST['modelo'];
 
+$tituloBusqueda = urlencode(str_replace(' ', '_', $fabricante . ' ' . $modelo));
+  $url = "https://es.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&titles=$tituloBusqueda";
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_USERAGENT, 'AplicacionTsa/1.0(victormon.7777@gmail.com)');
+$respuesta = curl_exec($ch);
+curl_close($ch);
+
+if ($respuesta) {
+  $datos = json_decode($respuesta, true);
+  $paginas = $datos['query']['pages'];
+
+  $descripcion = '';
+  foreach ($paginas as $pagina) {
+  if (isset($pagina['extract'])) {
+    $descripcion .= $pagina['extract'] . ', ';
+    break;
+  }
+  }
+  preg_match('/\b(\d+)\s*pasajeros?\b/i', $descripcion, $capacidad);
+  preg_match('/alcance.*?(\d+(?:\s?\d{3})*)\s?(km|kilómetros)/i', $descripcion, $alcance);
+  preg_match('/velocidad.*?(\d+(?:\s?\d{3})*)\s?(km\/h)/i', $descripcion, $velocidad);
+  $capacidad_texto = isset($capacidad[1]) ? $capacidad[1] : '0';
+  $alcance_texto = isset($alcance[1]) ? $alcance[1] : '0';
+  $velocidad_texto = isset($velocidad[1]) ? $velocidad[1] : '0';
+
+
+        // Mostrar la descripción y los detalles encontrados
+        echo '<h3>Descripción del avión:</h3>';
+        echo "<div id='descripcionAvion'><p>$descripcion</p></div>";
+
+        echo '<h3>Capacidad:</h3>';
+        if ($capacidad_texto === '0') {
+          echo '<p>No se encontró información de capacidad.</p>';
+          echo '<label for="capacidadManual">Ingrese la capacidad:</label>';
+          echo '<div id="capacidadAvion"><input type="text" id="capacidadManual" name="capacidadManual" class="form-control" placeholder="Ej. 300 pasajeros" required></div>';
+        } else {
+          echo '<div id="capacidadAvion"><p>' . $capacidad_texto . ' pasajeros</p></div>';
+        }
+        echo '<h3>Alcance:</h3>';
+        if ($alcance_texto === '0') {
+          echo '<p>No se encontró información de alcance.</p>';
+          echo '<label for="alcanceManual">Ingrese el alcance:</label>';
+          echo '<div id="alcanceAvion"><input type="text" id="alcanceManual" name="alcanceManual" class="form-control" placeholder="Ej. 15000 km" required></div>';
+        } else {
+          echo '<div id="alcanceAvion"><p>' .$alcance_texto . ' kilometros</p></div>';
+        }
+        echo '<h3>Velocidad:</h3>';
+        if ($velocidad_texto === '0') {
+          echo '<p>No se encontró información de la velocidad.</p>';
+          echo '<label for="velocidadManual">Ingrese el alcance:</label>';
+          echo '<div id="velocidadAvion"><input type="text" id="velocidadManual" name="velocidadManual" class="form-control" placeholder="Ej. 900 km/h" required></div>';
+        } else {
+          echo '<div id="velocidadAvion"><p>' . $velocidad_texto . ' km/h</p></div>';
+        }
+        } else {
+            echo 'Error al conectar con Wikipedia.';
+         }
+
+}
+
+//Funcion para procesar los datos del avion creado para guardarlo en la BD
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'crearAvionBusqueda') {
+  $fabricante = $_POST['fabricante'];
+  $modelo = $_POST['modelo'];
+  $descripcion = $_POST['descripcion'];
+  $capacidad = $_POST['capacidad'];
+  $alcance = $_POST['alcance'];
+  $velocidad = $_POST['velocidad'];
+  crearAvionBusqueda($fabricante, $modelo, $descripcion, $capacidad, $alcance, $velocidad);
 }
 
 //Funcion para crear Aviones y guardar en BD con los datos recibidos por AJAX de la funcion crearAviones
@@ -103,13 +177,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 //Funcion para recibir los datos de la modificacion del avion en la pagina detalleAvion
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])&& $_POST['action'] === 'editarAvion') {
   $conn = crearConexion();
+  session_start();
   if (isset($_POST['idAvion'])) {
     $id1 = ($_POST['idAvion']);
-    $descripcion = $_POST['editDescripcion'];
-    editarAvion($id1, $descripcion);
-  }else{
+    if (isset($_SESSION['usuario']) || isset($_SESSION['admin'])){
+      if (isset($_SESSION['usuario'])){
+        $usuario = $_SESSION['usuario'];
+      }elseif (isset($_SESSION['admin'])){
+        $usuario = $_SESSION['admin'];
+      }
+      $descripcionGuardada= $_POST['descripcionGuardada'];
+      $descripcion = $_POST['editDescripcion'];
+      $descripcionCompleta= $descripcionGuardada . "<br><h6>Informacion añadida por " .$usuario . "</h6>\n" . $descripcion;
+      editarAvion($id1, $descripcion, $descripcionCompleta);
+    }
+    }else{
     echo '<div class=" alert alert-danger text-center" role="alert">no funciona la recepcion</div>';
-  }
+    }
+
 }
 
 //Codigo para mostrar el auto completado en la busqueda de rutas
