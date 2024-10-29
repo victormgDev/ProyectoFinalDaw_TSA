@@ -58,6 +58,68 @@ function iniciarSesion(){
 }
 
 //Funcion para registrar usuario
+document.addEventListener('DOMContentLoaded', function() {
+  const usuarioInput = document.getElementById('usuarioRegistro');
+  const emailInput = document.getElementById('emailRegistro');
+  const passwordInput = document.getElementById('passwordRegistro');
+  const checkUsuario = document.getElementById('checkUsuario')
+  const checkEmail = document.getElementById('checkEmail');
+  const checkPassword = document.getElementById("checkPassword");
+  const registerButton = document.getElementById('btnRegistro'); // Obtén el botón de registro
+
+  // Desactiva el botón de registro inicialmente
+  registerButton.disabled = true;
+  usuarioInput.addEventListener('input', function() {
+    const usuario = this.value;
+    const regex = /^[A-Za-z]{4,}[0-9]*$/;
+
+    if (regex.test(usuario)) {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      checkUsuario.style.display = "inline";  // Mostrar el check
+
+    } else {
+      this.classList.remove("is-valid");
+      this.classList.add("is-invalid");
+      checkUsuario.style.display = "none";    // Ocultar el check
+      registerButton.disabled = true; // Desactivar el botón de registro
+    }
+  });
+
+  emailInput.addEventListener('input', function() {
+    const email = this.value;
+    const regex = /^[a-z]+@[a-z]+\.(com|es|org)$/;
+
+    if (regex.test(email)) {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      checkEmail.style.display = "inline";  // Mostrar el check
+
+    } else {
+      this.classList.remove("is-valid");
+      this.classList.add("is-invalid");
+      checkEmail.style.display = "none";    // Ocultar el check
+      registerButton.disabled = true; // Desactivar el botón de registro
+    }
+  });
+
+  passwordInput.addEventListener('input', function() {
+    const password = this.value;
+    const regex = /^[A-Za-z0-9]{6,}$/;
+
+    if (regex.test(password)) {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      checkPassword.style.display = "inline";  // Mostrar el check
+      registerButton.disabled = false; // Activar el botón de registro
+    } else {
+      this.classList.remove("is-valid");
+      this.classList.add("is-invalid");
+      checkPassword.style.display = "none";    // Ocultar el check
+      registerButton.disabled = true; // Desactivar el botón de registro
+    }
+  });
+});
 function registrarUsuario(usuario,email,password){
   console.log("funciona el boton");
   event.preventDefault();

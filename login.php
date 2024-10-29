@@ -2,6 +2,7 @@
 include 'modeloControlador/controlador.php';
 include 'templates/head.php';
 ?>
+
 <div class="container mt-5" aria-label="Contenedor principal de Login">
   <h1 class="text-center animate__animated animate__flip ">Iniciar Sesión</h1>
   <div class="row justify-content-center" aria-label="Fila del formulario">
@@ -25,6 +26,7 @@ include 'templates/head.php';
   </div>
   <script src="/appTsa/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 </div>
+<script src="/appTsa/js/app.js"></script>
 
 
 <?php include 'templates/footer.php'; ?>

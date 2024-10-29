@@ -5,6 +5,7 @@ session_start();
 <html lang="es" data-bs-theme="light" id="html">
 <head>
   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Conoce mas sobre los Aviones</title>
   <link rel="stylesheet" href="/appTsa/css/styles.css">
   <link rel="stylesheet" href="/appTsa/node_modules/bootstrap-icons/font/bootstrap-icons.css">
@@ -97,4 +98,5 @@ session_start();
 <script src="/appTsa/js/app.js"  ></script>
 <script src="/appTsa/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 </body>
+
 </html>

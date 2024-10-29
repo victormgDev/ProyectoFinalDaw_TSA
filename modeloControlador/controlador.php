@@ -47,12 +47,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'registrarUsuario') {
+  //Expresion regular para la contraseña de al menos 6 caracteres
+  function validarPassword($password){
+    return preg_match('/^[A-Za-z0-9]{6,}$/', $password);
+  }
 //recuperamos el formulario
-  $usuario = $_POST['usuario'];
-  $email = $_POST['email'];
-  $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-  registrarUsuario($usuario, $email, $password);
+  $usuario = $_POST['usuarioRegistro'];
+  $email = $_POST['emailRegistro'];
+  $password = $_POST['passwordRegistro'];
+  if (validarPassword($password)) {
+    echo '<div class="col-9 alert alert-success text-center" role="alert">Contraseña valida</div>';
+    $password = password_hash($_POST['passwordRegistro'], PASSWORD_DEFAULT);
+    registrarUsuario($usuario, $email, $password);
+  }else{
+    echo '<div class="col-9 alert alert-danger text-center">La contraseña debe de contener 6 caracteres minimo letras o numeros</div>';
+  }
 }
 
 //Funcion para realizar la busqueda de la descripcion del avion
