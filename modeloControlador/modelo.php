@@ -257,7 +257,8 @@ function detalleAvion(){
       echo '<h3>Descripcion:</h3><p> '.htmlspecialchars($row["descripcion"]).'</p>';
       echo '</div>';
       echo '<h3>Informacion añadida</h3><p> '.htmlspecialchars($row['descripcion_modificada']) .'</p>';
-      echo '<h3>Capacidad:</h3><p>'.htmlspecialchars($row["capacidad"]).'</p>';
+      echo '<h3>Capacidad:</h3><p>'.htmlspecialchars($row["capacidad"]).' Pasajeros</p>';
+      echo '<h3>Autonomia:</h3><p>'.htmlspecialchars($row["autonomia"]).' km</p>';
       echo '<h3>Velocidad Maxima:</h3><p>'.htmlspecialchars($row["velocidad_maxima"]).' km/h</p>';
     }else{
       echo '<div class=" alert alert-danger text-center" role="alert">Avion no encontrado</div>';

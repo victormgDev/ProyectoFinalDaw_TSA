@@ -25,7 +25,7 @@ function mostrarNoticias($urlRSS, $limite = 12){
       }
       echo '<div class="col-12 col-md-6 col-lg-4">';
       echo '<div class="card animate__animated animate__lightSpeedInLeft rounded-4 mt-3">';
-      echo '<div class="card card-body rounded-4">';
+      echo '<div class="card card-body rounded-4 ">';
       echo '<h4 class="card-header  "><a class="text-reset text-decoration-none" href="' . $item->link . '" target="_blank">' . $item->title . '</a></h4>';
       echo '</div>';
       echo '</div>';
@@ -121,7 +121,7 @@ if ($respuesta) {
         echo '<h3>Velocidad:</h3>';
         if ($velocidad_texto === '0') {
           echo '<p>No se encontró información de la velocidad.</p>';
-          echo '<label for="velocidadManual">Ingrese el alcance:</label>';
+          echo '<label for="velocidadManual">Ingrese la velocidad:</label>';
           echo '<div id="velocidadAvion"><input type="text" id="velocidadManual" name="velocidadManual" class="form-control" placeholder="Ej. 900 km/h" required></div>';
         } else {
           echo '<div id="velocidadAvion"><p>' . $velocidad_texto . ' km/h</p></div>';
@@ -283,9 +283,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])&& $_POST['action'] === 'editarMiCuenta') {
   $conn = crearConexion();
   $idUsuario = $_POST['idUsuario'];
-  $usuario = $_POST['usuario'];
-  $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-  $email = $_POST['email'];
+  $usuario = $_POST['usuarioEdit'];
+  $password = password_hash($_POST['passwordEdit'], PASSWORD_BCRYPT);
+  $email = $_POST['emailEdit'];
   if (!empty($usuario) && !empty($password) && !empty($email)) {
     comprobarEmail($idUsuario, $usuario,$email, $password);
   }else{

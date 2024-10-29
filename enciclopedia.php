@@ -1,20 +1,7 @@
 <?php
 require 'modeloControlador/controlador.php';
+include 'templates/head.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="node_modules/bootstrap-icons/font/bootstrap-icons.css">
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
-  <script src="node_modules/jquery/dist/jquery.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-</head>
-<body>
-<?php include 'templates/head.php'; ?>
 
 <div class="container-fluid mt-5">
   <h3 class="text-center">Enciclopedia</h3>
@@ -47,9 +34,5 @@ require 'modeloControlador/controlador.php';
 
 <div class="container-fluid mt-3" id="resultados">
 </div>
-
 <?php include 'templates/footer.php'; ?>
 
-<script src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
-</body>
-</html>

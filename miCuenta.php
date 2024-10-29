@@ -15,20 +15,39 @@ include 'templates/head.php';
       <div id="alertFormMiCuenta" aria-label="Div para alertas en la modificacion"></div>
       <div class="form-floating col">
         <h3 class="text-center mt-2">Editar Datos</h3>
-        <form id="formEditarMiCuenta" method="POST" onsubmit="editarMiCuenta(<?php echo $_SESSION['idUsuario']; ?>); return false;" >
+        <form id="formEditarMiCuenta" method="POST" class="needs-validation" novalidate onsubmit="editarMiCuenta(<?php echo $_SESSION['idUsuario']; ?>); return false;" >
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Nombre de usuario" required>
-            <label for="usuario" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="usuarioEdit" name="usuarioEdit" placeholder="Nombre de usuario" required>
+            <label for="usuarioEdit" class="form-label">Nombre</label>
+              <div class="valid-feedback position-absolute top-50 end-0 translate-middle me-2" id="checkUsuarioEdit" style="display: none">
+                  ✔️
+              </div>
+              <div class="invalid-feedback">
+                  El usuario debe de empezar por minimo 4 letras y le puede seguir un numero
+              </div>
           </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control " id="emailEdit" name="emailEdit" placeholder="Usuario@ejemplo.com" required >
+                <label for="emailEdit" class="form-label" >Usuario@ejemplo.com</label>
+                <div class="valid-feedback position-absolute top-50 end-0 translate-middle me-2" id="checkEmailEdit" style="display: none">
+                    ✔️
+                </div>
+                <div class="invalid-feedback">
+                    El email debe comenzar por letra minuscula seguido de @ .com , .es o .org
+                </div>
+            </div>
           <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required >
-            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="passwordEdit" name="passwordEdit" placeholder="Contraseña" required >
+            <label for="passwordEdit" class="form-label">Contraseña</label>
+              <div class="valid-feedback position-absolute top-50 end-0 translate-middle me-2" id="checkPasswordEdit" style="display: none">
+                  ✔️
+              </div>
+              <div class="invalid-feedback">
+                  La contraseña debe tener al menos 6 caracteres, incluyendo letras o números.
+              </div>
           </div>
-          <div class="form-floating mb-3">
-            <input type="email" class="form-control " id="email" name="email" placeholder="Usuario@ejemplo.com" required >
-            <label for="email" class="form-label" >Usuario@ejemplo.com</label>
-          </div>
-          <button type="submit" class="btn btn-outline-primary w-25 mx-auto d-block mb-3">Guardar</button>
+
+          <button id="btnUsuarioEdit" type="submit" class="btn btn-outline-primary w-25 mx-auto d-block mb-3">Guardar</button>
         </form>
       </div>
     </div>
@@ -64,3 +83,4 @@ include 'templates/head.php';
     </div>
   </div>
 </div>
+<?php include 'templates/footer.php';?>

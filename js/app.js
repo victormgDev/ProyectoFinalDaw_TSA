@@ -229,10 +229,15 @@ function crearAvionBusqueda(){
   })
     .then(response =>response.text())
     .then(data => {
-      document.querySelector('#alertCrearAvion').innerHTML = data;
-      setTimeout(function (){
-        window.location.href = '/appTsa/enciclopedia.php'
-      }, 1500);
+      if (data.includes('<div class=\'alert alert-warning text-center\' role=\'alert\'>Desbes subir una imagen</div>')){
+        document.querySelector('#alertCrearAvion').innerHTML = data;
+      }else{
+        document.querySelector('#alertCrearAvion').innerHTML = data;
+        setTimeout(function (){
+          window.location.href = '/appTsa/enciclopedia.php'
+        }, 1500);
+      }
+
     })
     .catch(error => {
       console.error('Error al crear Avion', error);
@@ -486,6 +491,68 @@ function guardarRuta(idUsuario, origen, destino, modeloAvion, lat, lng, direccio
 }
 
 //Funcion para recibir los datos del formulario de mi cuenta para editar los datos de usuario
+document.addEventListener('DOMContentLoaded', function() {
+  const usuarioInputEdit = document.getElementById('usuarioEdit');
+  const emailInputEdit = document.getElementById('emailEdit');
+  const passwordInputEdit = document.getElementById('passwordEdit');
+  const checkUsuarioEdit = document.getElementById('checkUsuarioEdit')
+  const checkEmailEdit = document.getElementById('checkEmailEdit');
+  const checkPasswordEdit = document.getElementById("checkPasswordEdit");
+  const registerButtonEdit = document.getElementById('btnUsuarioEdit'); // Obtén el botón de registro
+
+  // Desactiva el botón de registro inicialmente
+  registerButtonEdit.disabled = true;
+  usuarioInputEdit.addEventListener('input', function() {
+    const usuario = this.value;
+    const regex = /^[A-Za-z]{4,}[0-9]*$/;
+
+    if (regex.test(usuario)) {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      checkUsuarioEdit.style.display = "inline";  // Mostrar el check
+
+    } else {
+      this.classList.remove("is-valid");
+      this.classList.add("is-invalid");
+      checkUsuarioEdit.style.display = "none";    // Ocultar el check
+      registerButtonEdit.disabled = true; // Desactivar el botón de registro
+    }
+  });
+
+  emailInputEdit.addEventListener('input', function() {
+    const email = this.value;
+    const regex = /^[a-z]+@[a-z]+\.(com|es|org)$/;
+
+    if (regex.test(email)) {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      checkEmailEdit.style.display = "inline";  // Mostrar el check
+
+    } else {
+      this.classList.remove("is-valid");
+      this.classList.add("is-invalid");
+      checkEmailEdit.style.display = "none";    // Ocultar el check
+      registerButtonEdit.disabled = true; // Desactivar el botón de registro
+    }
+  });
+
+  passwordInputEdit.addEventListener('input', function() {
+    const password = this.value;
+    const regex = /^[A-Za-z0-9]{6,}$/;
+
+    if (regex.test(password)) {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      checkPasswordEdit.style.display = "inline";  // Mostrar el check
+      registerButtonEdit.disabled = false; // Activar el botón de registro
+    } else {
+      this.classList.remove("is-valid");
+      this.classList.add("is-invalid");
+      checkPasswordEdit.style.display = "none";    // Ocultar el check
+      registerButtonEdit.disabled = true; // Desactivar el botón de registro
+    }
+  });
+});
 function editarMiCuenta(idUsuario){
   event.preventDefault();
   console.log(idUsuario);
@@ -504,6 +571,9 @@ function editarMiCuenta(idUsuario){
       }else{
         document.querySelector('#alertFormMiCuenta').innerHTML = '<div class="alert alert-success text-center mt-3">Usuario modificado Correctamente</div>';
         document.querySelector('#datosFormMiCuenta').innerHTML = data;
+        setTimeout(function () {
+          location.reload();
+        }, 2500);
       }
 
     })
