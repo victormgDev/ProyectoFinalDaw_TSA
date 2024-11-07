@@ -99,10 +99,10 @@ if ($respuesta) {
 
 
         // Mostrar la descripción y los detalles encontrados
-        echo '<h3>Descripción del avión:</h3>';
+        echo '<h5>Descripción del avión:</h5>';
         echo "<div id='descripcionAvion'><p>$descripcion</p></div>";
 
-        echo '<h3>Capacidad:</h3>';
+        echo '<h5>Capacidad:</h5>';
         if ($capacidad_texto === '0') {
           echo '<p>No se encontró información de capacidad.</p>';
           echo '<label for="capacidadManual">Ingrese la capacidad:</label>';
@@ -110,7 +110,7 @@ if ($respuesta) {
         } else {
           echo '<div id="capacidadAvion"><p>' . $capacidad_texto . ' pasajeros</p></div>';
         }
-        echo '<h3>Alcance:</h3>';
+        echo '<h5>Alcance:</h5>';
         if ($alcance_texto === '0') {
           echo '<p>No se encontró información de alcance.</p>';
           echo '<label for="alcanceManual">Ingrese el alcance:</label>';
@@ -118,7 +118,7 @@ if ($respuesta) {
         } else {
           echo '<div id="alcanceAvion"><p>' .$alcance_texto . ' kilometros</p></div>';
         }
-        echo '<h3>Velocidad:</h3>';
+        echo '<h5>Velocidad:</h5>';
         if ($velocidad_texto === '0') {
           echo '<p>No se encontró información de la velocidad.</p>';
           echo '<label for="velocidadManual">Ingrese la velocidad:</label>';
@@ -126,6 +126,9 @@ if ($respuesta) {
         } else {
           echo '<div id="velocidadAvion"><p>' . $velocidad_texto . ' km/h</p></div>';
         }
+        echo '<h5>Codigos icao del modelo</h5>';
+        echo '<label for="codigosIcao">Ingrese los codigos ICAO separados por una (,):</label>';
+        echo '<div id="codigosIcaoAvion"><input type="text" id="codigosIcao" name="codigosIcao" class="form-control" placeholder="Ej. B737, B38M" required></div>';
         } else {
             echo 'Error al conectar con Wikipedia.';
          }
@@ -140,7 +143,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
   $capacidad = $_POST['capacidad'];
   $alcance = $_POST['alcance'];
   $velocidad = $_POST['velocidad'];
-  crearAvionBusqueda($fabricante, $modelo, $descripcion, $capacidad, $alcance, $velocidad);
+  $codigosIata = $_POST['codigosIcao'];
+  session_start();
+  if (isset($_SESSION['id'])){
+    $idUsuario = $_SESSION['id'];
+    crearAvionBusqueda($fabricante, $modelo, $descripcion, $capacidad, $alcance, $velocidad,$idUsuario,$codigosIata);
+  }else {
+    $idUsuario = $_SESSION['idAdmin'];
+    crearAvionBusqueda($fabricante, $modelo, $descripcion, $capacidad, $alcance, $velocidad,$idUsuario, $codigosIata);
+  }
+
 }
 
 //Funcion para crear Aviones y guardar en BD con los datos recibidos por AJAX de la funcion crearAviones

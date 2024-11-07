@@ -186,6 +186,7 @@ function crearAvionBusqueda(){
   const capacidad = document.getElementById('capacidadAvion').innerText || document.getElementById('capacidadManual').value;
   const alcance = document.getElementById('alcanceAvion').innerText || document.getElementById('alcanceManual').value;
   const velocidad = document.getElementById('velocidadAvion').innerText || document.getElementById('velocidadManual').value;
+  const codigosIcao = document.getElementById('codigosIcao').innerText || document.getElementById('codigosIcao').value;
 
   const capacidadNum = parseInt(capacidad.replace(/\D/g, ''), 10);
   const alcanceNum = parseInt(alcance.replace(/\D/g, ''), 10);
@@ -196,8 +197,9 @@ function crearAvionBusqueda(){
   formDatos.append('action', 'crearAvionBusqueda');
   formDatos.append('descripcion', descripcion);
   formDatos.append('capacidad', capacidadNum);
-  formDatos.append('alcance', alcanceNum)
+  formDatos.append('alcance', alcanceNum);
   formDatos.append('velocidad', velocidadNum);
+  formDatos.append('codigosIcao', codigosIcao);
 
   fetch('modeloControlador/controlador.php', {
     method: 'POST',

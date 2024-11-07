@@ -10,7 +10,7 @@ include 'templates/head.php';
     <div class="col12">
       <?php
       //Si el usuario a iniciado sesion aparecera un boton para poder añadir mas aviones
-      if (isset($_SESSION['usuario'])) {
+      if (isset($_SESSION['usuario'])|| isset($_SESSION['admin'])) {
         echo "<a href='avion.php' class='btn btn-outline-primary mb-3'>Añadir Avion</a>";
       }
       ?>
@@ -22,7 +22,7 @@ include 'templates/head.php';
           <option value="velocidad_maxima">Velocidad Maxima</option>
           <option value="capacidad">Capacidad</option>
         </select>
-        <select class="form-select me-2" name="direccion"aria-label="Direccion de Busqueda">
+        <select class="form-select me-2" name="direccion" aria-label="Direccion de Busqueda">
           <option value="ASC">Ascendente</option>
           <option value="DESC">Descendente</option>
         </select>

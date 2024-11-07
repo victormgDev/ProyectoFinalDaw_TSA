@@ -154,7 +154,7 @@ function crearAvion($fabricante, $modelo, $capacidad, $velMax, $autonomia, $desc
 }
 
 //Funcion para guardar en la BD los datos del avion a crear
-function crearAvionBusqueda($fabricante, $modelo, $descripcion, $capacidad, $alcance, $velocidad){
+function crearAvionBusqueda($fabricante, $modelo, $descripcion, $capacidad, $alcance, $velocidad, $idUsuario, $codigosIata){
   $conn = crearConexion();
   //Sentencia para comprobar si el modelo ya existe
   $sql1 = "SELECT id FROM aviones WHERE modelo=?";
@@ -175,9 +175,15 @@ function crearAvionBusqueda($fabricante, $modelo, $descripcion, $capacidad, $alc
       //Movemos la imagen al directorio
       if (move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaImagen)) {
         //Consulta Sql
-        $sql= "INSERT INTO aviones (fabricante, modelo, capacidad, velocidad_maxima, autonomia, descripcion, imagen_url) values (?,?,?,?,?,?,?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssiiiss", $fabricante, $modelo, $capacidad, $velocidad, $alcance, $descripcion, $url);
+        if (isset($_SESSION['id'])){
+          $sql= "INSERT INTO aviones (fabricante, modelo, capacidad, velocidad_maxima, autonomia, descripcion, imagen_url, id_usuario, codigos_iata) values (?,?,?,?,?,?,?,?,?)";
+          $stmt = $conn->prepare($sql);
+          $stmt->bind_param("ssiiissis", $fabricante, $modelo, $capacidad, $velocidad, $alcance, $descripcion, $url, $idUsuario, $codigosIata);
+        }else{
+          $sql= "INSERT INTO aviones (fabricante, modelo, capacidad, velocidad_maxima, autonomia, descripcion, imagen_url, id_admin, codigos_iata) values (?,?,?,?,?,?,?,?,?)";
+          $stmt = $conn->prepare($sql);
+          $stmt->bind_param("ssiiissis", $fabricante, $modelo, $capacidad, $velocidad, $alcance, $descripcion, $url, $idUsuario, $codigosIata);
+        }
 
         if ($stmt->execute()) {
           echo "<div class='alert alert-success text-center' role='alert'>Avion creado correctamente</div>";
