@@ -14,7 +14,7 @@ session_start();
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
-<body class="">
+<body>
 <nav class="navbar sticky-top navbar-expand-lg bg-light rounded-top-3 mb-3">
   <div class="container-fluid">
     <a class="navbar-brand text-center d-flex justify-content-center p-0" href="/appTsa/index.php" aria-label="Barra de navegacion">
