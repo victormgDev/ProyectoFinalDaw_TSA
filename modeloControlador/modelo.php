@@ -428,6 +428,8 @@ function mostrarRutas($origen, $destino){
           if (isset($vuelo['aircraft']['icao'])) {
             $_SESSION['modeloAvion'] = $vuelo['aircraft']['icao'];
             echo '<p class="card-text">Código IATA del Avión: ' . $vuelo['aircraft']['icao'] . "<br></p>";
+            echo '<button onclick="mostrarInfoAvion(\'' . $vuelo['aircraft']['icao'] . '\')" class="btn btn-outline-success btn-sm">Mostrar Avión</button>';
+            echo '<div  id="infoAvion'.$vuelo["aircraft"]["icao"].'" class="mt-4"></div>';
           } else {
             echo '<p class="card-text">Código IATA del Avión no disponible.</p>';
           }
@@ -465,6 +467,27 @@ function mostrarRutas($origen, $destino){
     echo '<div class="alert alert-warning" role="alert">
                         No se han encontrado rutas
                       </div>';;
+  }
+}
+
+//Funcion para mostrar la informacion del avion en la busqueda
+function mostrarInfoAvion($iata){
+  $conn = crearConexion();
+  $sql = "SELECT * FROM aviones WHERE codigos_iata LIKE ?";
+  $stmt = $conn->prepare($sql);
+  $iataBusqueda = '%' . $iata . '%';
+  $stmt->bind_param("s", $iataBusqueda);
+  $stmt->execute();
+  $resultado = $stmt->get_result();
+
+  if ($resultado->num_rows>0){
+    $row = $resultado->fetch_assoc();
+    echo '<h2>'.htmlspecialchars($row['fabricante']).' - '.htmlspecialchars($row['modelo']).'</h2>';
+    echo '<a href="detalleAvion.php?id=' . urlencode($row["id"]) . '" target="_blank">';
+    echo '<img src="' . htmlspecialchars($row["imagen_url"]) . '" class="img-fluid rounded-3" alt="imagen avión">';
+    echo '</a>';
+  }else {
+    echo '<div class=" alert alert-danger text-center" role="alert">Avion no encontrado</div>';
   }
 }
 
@@ -547,22 +570,39 @@ function guardarBusqueda($idUsuario, $origen, $destino, $modeloAvion){
     }
   }else {
     echo 'No se encontraron resultados';
+    return false;
   }
+// Consulta para obtener el id del avión que coincida con al menos dos caracteres seguidos en el modelo
+  $modeloBusqueda = '%' . $modeloAvion . '%';  // Búsqueda parcial en cualquier parte del modelo
+  $sqlAvion = "SELECT id FROM aviones WHERE codigos_iata LIKE ?";
+  $stmtAvion = $conn->prepare($sqlAvion);
+  $stmtAvion->bind_param("s", $modeloBusqueda);
+  $stmtAvion->execute();
+  $resultadoAvion = $stmtAvion->get_result();
+
+  $idAvion = null;
+  if ($resultadoAvion->num_rows > 0) {
+    $avion = $resultadoAvion->fetch_assoc();
+    $idAvion = $avion['id'];
+  } else {
+    echo 'No se encontró ningún avión coincidente';
+  }
+
   session_start();
-  if (isset($_SESSION['idAdmin'])){
-    echo '<div class="col-9 mt-3 alert alert-success text-center">'.$idUsuario. 'id del admin </div>';
-    $sql1 = "INSERT INTO busquedas (id_admin,id_aeropuerto_origen, iata_origen, origen, id_aeropuerto_destino, iata_destino, destino, modelo_avion, mostrado_mapa) VALUES (?,?,?,?,?,?,?,?,?)";
-
-  }else{
-    $sql1 = "INSERT INTO busquedas (id_usuario,id_aeropuerto_origen, iata_origen, origen, id_aeropuerto_destino, iata_destino, destino, modelo_avion, mostrado_mapa) VALUES (?,?,?,?,?,?,?,?,?)";
-
+  if (isset($_SESSION['idAdmin'])) {
+    $sql1 = "INSERT INTO busquedas (id_admin, id_aeropuerto_origen, iata_origen, origen, id_aeropuerto_destino, iata_destino, destino, modelo_avion, id_avion, mostrado_mapa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt1 = $conn->prepare($sql1);
+    $stmt1->bind_param("iississsis", $idUsuario, $idAeropuertoOrigen, $origen, $ciudadOrigen, $idAeropuertoDestino, $destino, $ciudadDestino, $modeloAvion, $idAvion, $mostradoMapa);
+  } else {
+    $sql1 = "INSERT INTO busquedas (id_usuario, id_aeropuerto_origen, iata_origen, origen, id_aeropuerto_destino, iata_destino, destino, modelo_avion, id_avion, mostrado_mapa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt1 = $conn->prepare($sql1);
+    $stmt1->bind_param("iississsis", $idUsuario, $idAeropuertoOrigen, $origen, $ciudadOrigen, $idAeropuertoDestino, $destino, $ciudadDestino, $modeloAvion, $idAvion, $mostradoMapa);
   }
-  //Sentencia SQL insert
-  $stmt1=$conn->prepare($sql1);
-  $stmt1->bind_param("iississss",$idUsuario,$idAeropuertoOrigen,$origen, $ciudadOrigen,$idAeropuertoDestino,$destino,$ciudadDestino,$modeloAvion, $mostradoMapa);
+
+  // Ejecutar el INSERT
   $stmt1->execute();
 
-  return $stmt1->affected_rows >0; //devuelve true si se ha completado el insert
+  return $stmt1->affected_rows > 0;
 }
 
 //Funcion para la pagina miCuenta.php para mostrar los datos de la cuenta de usuario y el formulario para editar datos
@@ -638,6 +678,7 @@ function mostrarMisConsultas($idUsuario){
   }else {
     echo '<tr><td colspan="5">Aun no has realizado ninguna Busqueda</td></tr>';
   }
+  echo '<div class="row justify-content-center" id="avionRuta"></div>';
 }
 
 

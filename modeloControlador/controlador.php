@@ -248,6 +248,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])&& $_POST['a
 
 }
 
+//Funcion para mostrar el avion en la busqueda
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'mostrarInfoAvion'){
+  $iata = $_POST['iata'];
+  mostrarInfoAvion($iata);
+}
+
 //Funcion para comprobar si existe la session de usuario
 function existeUsuario(){
   if (isset($_SESSION['id']) || isset($_SESSION['idAdmin'])) {

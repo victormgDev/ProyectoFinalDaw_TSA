@@ -178,30 +178,6 @@ fetch('modeloControlador/controlador.php', {
   });
 }
 
-//Funcion para crear Aviones y añadir a la base de datos
-function crearAvion(){
-  console.log("funciona el boton");
-  event.preventDefault();
-
-  let form =document.querySelector('#formCrearAvion');
-  let formDatos = new FormData(form);
-  formDatos.append('action', 'crearAvion');
-  fetch('modeloControlador/controlador.php', {
-    method: 'POST',
-    body: formDatos,
-  })
-    .then(response =>response.text())
-    .then(data => {
-      document.querySelector('#alertCrearAvion').innerHTML = data;
-      setTimeout(function (){
-        window.location.href = '/appTsa/enciclopedia.php'
-      }, 1500);
-    })
-    .catch(error => {
-      console.error('Error al crear Avion', error);
-    })
-}
-
 //Funcion para crear el avion mostrado en la busqueda
 function crearAvionBusqueda(){
   console.log("funciona el boton crearAvionBusqueda");
@@ -385,6 +361,26 @@ function buscarVuelos(){
   .catch(error => {
     console.error('Error al buscar Vuelos', error);
   })
+}
+
+//Funcion para mostrar el avion en la busqueda
+function mostrarInfoAvion(iata){
+console.log('Funciona el boton de mostrar avion')
+let formDatos = new FormData();
+formDatos.append('action', 'mostrarInfoAvion');
+formDatos.append('iata', iata)
+
+  fetch('modeloControlador/controlador.php', {
+    method: 'POST',
+    body: formDatos,
+  })
+      .then(response =>response.text())
+      .then(data =>{
+        document.querySelector(`#infoAvion${iata}`).innerHTML = data
+      })
+      .catch(error =>{
+        console.error('Error al mostrar el avion', error);
+      })
 }
 
 //Funcion para trazar la ruta en el mapa desde el Origen al Avion
@@ -582,32 +578,6 @@ function editarMiCuenta(idUsuario){
     })
 }
 
-//Funcion para hacer Login como Administrador en la pagina logAdmin.php
-/*function iniciarSesionAdmin(event){
-  event.preventDefault();
-  console.log('funciona el boton');
-
-  let form =document.querySelector('#formLoginAdmin');
-  let formDatos = new FormData(form);
-  formDatos.append('action', 'iniciarSesionAdmin');
-
-  fetch('modeloControlador/controladorAdmin.php', {
-    method: 'POST',
-    body: formDatos,
-  })
-    .then(response =>response.text())
-    .then(data => {
-      if (data.includes('<div class="alert alert-success text-center">Ha iniciado sesion como Adminsitrador</div>')){
-        window.location.href = '/indexAdmin.php';
-      }else{
-        document.querySelector('#divCambiarPasword').innerHTML = data;
-
-      }
-    })
-    .catch(error => {
-      console.error('Error al login Admin', error);
-    })
-}*/
 
 //Funcion para cambiar la contraseña del usuario admin
 function cambiarPasswordAdmin(idAdmin){
@@ -626,7 +596,7 @@ function cambiarPasswordAdmin(idAdmin){
     .then(response =>response.text())
     .then(data => {
       if (data.includes('Contraseña Modificada correctamente')){
-        window.location.href = 'logAdmin.php';
+        window.location.href = 'login.php';
       }else {
         document.querySelector('#alertCambioPass').innerHTML = data;
       }
@@ -781,7 +751,7 @@ function eliminarTotalBusquedas(){
 
 //Funcion para redirigir a pagina crear Avion desde Admin
 function crearAvionAdmin(){
-  window.location.href= 'crearAvion.php';
+  window.location.href= 'avion.php';
 }
 
 //Funcion para recibir los datos del formulario de mi cuenta Admin para editar los datos de Admin
