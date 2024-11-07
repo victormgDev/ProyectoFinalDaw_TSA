@@ -482,7 +482,7 @@ function mostrarInfoAvion($iata){
 
   if ($resultado->num_rows>0){
     $row = $resultado->fetch_assoc();
-    echo '<h2>'.htmlspecialchars($row['fabricante']).' - '.htmlspecialchars($row['modelo']).'</h2>';
+    echo '<h5>'.htmlspecialchars($row['fabricante']).' - '.htmlspecialchars($row['modelo']).'</h5>';
     echo '<a href="detalleAvion.php?id=' . urlencode($row["id"]) . '" target="_blank">';
     echo '<img src="' . htmlspecialchars($row["imagen_url"]) . '" class="img-fluid rounded-3" alt="imagen avión">';
     echo '</a>';
