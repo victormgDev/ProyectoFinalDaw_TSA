@@ -10,7 +10,7 @@ session_start();
   <link rel="stylesheet" href="/appTsa/css/styles.css">
   <link rel="stylesheet" href="/appTsa/node_modules/bootstrap-icons/font/bootstrap-icons.css">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
-  <script src="/todoSobreAviones/node_modules/jquery/dist/jquery.js"></script>
+  <script src="/appTsa/node_modules/jquery/dist/jquery.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
