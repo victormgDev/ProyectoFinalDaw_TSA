@@ -60,6 +60,7 @@ function iniciarSesion ($email, $password){
         if ($row['password_cambiada'] == 0) {
           //header('Location: indexAdmin.php' );
           $formulario = '
+                <div class="alert alert-warning">Cambia la contraseña</div>
                 <form id="formCambiarPassword" method="POST" onsubmit="cambiarPasswordAdmin(' . $idAdmin . ')"  aria-label="Formulario para Iniciar Sesion como Admin">
                 <div class="form-floating mb-3">
                     <input type="password" class="form-control mt-3" id="cambioPasswordAdmin" name="cambioPasswordAdmin" placeholder="Contraseña" required>
@@ -77,7 +78,7 @@ function iniciarSesion ($email, $password){
         echo '<div class="alert alert-warning">La Contraseña no coincide</div>';
       }
     } else {
-      echo '<div class="alert alert-warning">Usuario no encontrado</div>';
+      echo '<div class="col-9 alert alert-warning text-center">Usuario no encontrado</div>';
     }
     $stmt->close();
     $conn->close();
@@ -111,46 +112,6 @@ function registrarUsuario($usuario, $email, $password){
     $conn->close();
   }
 
-}
-
-//Funcion para crear el avion en la BD
-function crearAvion($fabricante, $modelo, $capacidad, $velMax, $autonomia, $descripcion){
-  $conn = crearConexion();
-  //Sentencia para comprobar si el modelo ya existe
-  $sql1 = "SELECT id FROM aviones WHERE modelo=?";
-  $stmt1 = $conn->prepare($sql1);
-  $stmt1->bind_param('s', $modelo);
-  $stmt1->execute();
-  $stmt1->store_result();//Aqui almacenamos los resultados
-  if ($stmt1->num_rows > 0){ //Comprobamos si existe el modelo
-    echo '<div class=" alert alert-danger text-center" role="alert">El avion ya existe</div>';
-  }else{
-    //Para subir la imagen
-    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
-      $dirSubida = __DIR__ . "/../img/";
-      $nombreImagen = basename($_FILES['imagen']['name']);
-      $url = "http://localhost/appTsa/img/" . $nombreImagen;
-      $rutaImagen = $dirSubida . $nombreImagen;
-
-      //Movemos la imagen al directorio
-      if (move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaImagen)) {
-        //Consulta Sql
-        $sql= "INSERT INTO aviones (fabricante, modelo, capacidad, velocidad_maxima, autonomia, descripcion, imagen_url) values (?,?,?,?,?,?,?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssiiiss", $fabricante, $modelo, $capacidad, $velMax, $autonomia, $descripcion, $url);
-
-        if ($stmt->execute()) {
-          echo "<div class='alert alert-success text-center' role='alert'>Avion creado correctamente</div>";
-        }else {
-          echo "<div class='alert alert-danger text-center' role='alert'>Error al crear el avion</div>";
-        }
-      }else {
-        echo "<div class='alert alert-danger text-center' role='alert'>Error al subir la imagen</div>";
-      }
-    }else{
-      echo "<div class='alert alert-warning text-center' role='alert'>Desbes subir una imagen</div>";
-    }
-  }
 }
 
 //Funcion para guardar en la BD los datos del avion a crear
@@ -433,8 +394,7 @@ function mostrarRutas($origen, $destino){
           echo '<p class="card-text">Destino: ' . $vuelo['arrival']['airport'] . "<br></p>";
           if (isset($vuelo['aircraft']['icao'])) {
             $_SESSION['modeloAvion'] = $vuelo['aircraft']['icao'];
-            echo '<p class="card-text">Código IATA del Avión: ' . $vuelo['aircraft']['icao'] . "<br></p>";
-            echo '<button onclick="mostrarInfoAvion(\'' . $vuelo['aircraft']['icao'] . '\')" class="btn btn-outline-success btn-sm">Mostrar Avión</button>';
+            echo '<p class="card-text">Código IATA del Avión: ' . $vuelo['aircraft']['icao'] . ' <button onclick="mostrarInfoAvion(\'' . $vuelo['aircraft']['icao'] . '\')" class="btn btn-outline-success btn-sm">Mostrar Avión</button></p>';
             echo '<div  id="infoAvion'.$vuelo["aircraft"]["icao"].'" class="mt-4"></div>';
           } else {
             echo '<p class="card-text">Código IATA del Avión no disponible.</p>';
@@ -453,7 +413,7 @@ function mostrarRutas($origen, $destino){
             $lat= $vuelo['live']['latitude'];
             $lng= $vuelo['live']['longitude'];
             echo '<p class="card-text">Latitud: ' . $vuelo['live']['latitude'] . "<br></p>";
-            echo '<p class="card-text">Longitud: ' . $vuelo['live']['longitude'] .  "</p>";
+            echo '<p class="card-text">Longitud: ' . $vuelo['live']['longitude'] .  '</p>';
             echo "<button class='btn btn-outline-success btn-sm' id='btnMostrar' onclick='guardarRuta($idUsuario, \"$origen\", \"$destino\", \"{$_SESSION['modeloAvion']}\", $lat, $lng, $direccion, $latOrigen,$lngOrigen, $latDestino, $lngDestino)'>Mostrar en el Mapa</button>";//funcion para guardar el avion de la ruta y origen y destino
             // Botón para mostrar en el mapa
           } else {

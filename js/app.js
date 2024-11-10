@@ -62,13 +62,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const usuarioInput = document.getElementById('usuarioRegistro');
   const emailInput = document.getElementById('emailRegistro');
   const passwordInput = document.getElementById('passwordRegistro');
-  const checkUsuario = document.getElementById('checkUsuario')
-  const checkEmail = document.getElementById('checkEmail');
-  const checkPassword = document.getElementById("checkPassword");
   const registerButton = document.getElementById('btnRegistro'); // Obtén el botón de registro
 
   // Desactiva el botón de registro inicialmente
   registerButton.disabled = true;
+  emailInput.disabled = true;
+  passwordInput.disabled = true;
   usuarioInput.addEventListener('input', function() {
     const usuario = this.value;
     const regex = /^[A-Za-z]{4,}[0-9]*$/;
@@ -76,13 +75,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (regex.test(usuario)) {
       this.classList.remove("is-invalid");
       this.classList.add("is-valid");
-      checkUsuario.style.display = "inline";  // Mostrar el check
+      emailInput.disabled = false;
 
     } else {
       this.classList.remove("is-valid");
       this.classList.add("is-invalid");
-      checkUsuario.style.display = "none";    // Ocultar el check
       registerButton.disabled = true; // Desactivar el botón de registro
+      emailInput.disabled = true;
     }
   });
 
@@ -93,13 +92,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (regex.test(email)) {
       this.classList.remove("is-invalid");
       this.classList.add("is-valid");
-      checkEmail.style.display = "inline";  // Mostrar el check
+      passwordInput.disabled = false;
 
     } else {
       this.classList.remove("is-valid");
       this.classList.add("is-invalid");
-      checkEmail.style.display = "none";    // Ocultar el check
       registerButton.disabled = true; // Desactivar el botón de registro
+      passwordInput.disabled = true;
+
     }
   });
 
@@ -110,12 +110,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (regex.test(password)) {
       this.classList.remove("is-invalid");
       this.classList.add("is-valid");
-      checkPassword.style.display = "inline";  // Mostrar el check
       registerButton.disabled = false; // Activar el botón de registro
     } else {
       this.classList.remove("is-valid");
       this.classList.add("is-invalid");
-      checkPassword.style.display = "none";    // Ocultar el check
       registerButton.disabled = true; // Desactivar el botón de registro
     }
   });
@@ -134,10 +132,14 @@ function registrarUsuario(usuario,email,password){
   })
     .then(response =>response.text())
     .then(data => {
-      document.querySelector('#alertRegistro').innerHTML = data;
-      setTimeout(function (){
-        window.location.href = '/appTsa/login.php'
-      },1500);
+      if (data.includes('El usuario ya existe')){
+        document.querySelector('#alertRegistro').innerHTML = data
+      }else{
+        document.querySelector('#alertRegistro').innerHTML = data;
+        setTimeout(function (){
+          window.location.href = '/appTsa/login.php'
+        },1500);
+      }
     })
     .catch(error => {
       document.querySelector('#alertRegistro').innerHTML = data;
@@ -493,13 +495,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const usuarioInputEdit = document.getElementById('usuarioEdit');
   const emailInputEdit = document.getElementById('emailEdit');
   const passwordInputEdit = document.getElementById('passwordEdit');
-  const checkUsuarioEdit = document.getElementById('checkUsuarioEdit')
-  const checkEmailEdit = document.getElementById('checkEmailEdit');
-  const checkPasswordEdit = document.getElementById("checkPasswordEdit");
   const registerButtonEdit = document.getElementById('btnUsuarioEdit'); // Obtén el botón de registro
 
   // Desactiva el botón de registro inicialmente
   registerButtonEdit.disabled = true;
+  emailInputEdit.disabled = true;
+  passwordInputEdit.disabled = true;
   usuarioInputEdit.addEventListener('input', function() {
     const usuario = this.value;
     const regex = /^[A-Za-z]{4,}[0-9]*$/;
@@ -507,13 +508,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (regex.test(usuario)) {
       this.classList.remove("is-invalid");
       this.classList.add("is-valid");
-      checkUsuarioEdit.style.display = "inline";  // Mostrar el check
+      emailInputEdit.disabled = false;
+
 
     } else {
       this.classList.remove("is-valid");
       this.classList.add("is-invalid");
-      checkUsuarioEdit.style.display = "none";    // Ocultar el check
       registerButtonEdit.disabled = true; // Desactivar el botón de registro
+      emailInputEdit.disabled = true;
     }
   });
 
@@ -524,13 +526,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (regex.test(email)) {
       this.classList.remove("is-invalid");
       this.classList.add("is-valid");
-      checkEmailEdit.style.display = "inline";  // Mostrar el check
+      passwordInputEdit.disabled = false;
+
 
     } else {
       this.classList.remove("is-valid");
       this.classList.add("is-invalid");
-      checkEmailEdit.style.display = "none";    // Ocultar el check
       registerButtonEdit.disabled = true; // Desactivar el botón de registro
+      passwordInputEdit.disabled = true;
     }
   });
 
@@ -541,12 +544,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (regex.test(password)) {
       this.classList.remove("is-invalid");
       this.classList.add("is-valid");
-      checkPasswordEdit.style.display = "inline";  // Mostrar el check
       registerButtonEdit.disabled = false; // Activar el botón de registro
+
     } else {
       this.classList.remove("is-valid");
       this.classList.add("is-invalid");
-      checkPasswordEdit.style.display = "none";    // Ocultar el check
       registerButtonEdit.disabled = true; // Desactivar el botón de registro
     }
   });
@@ -579,7 +581,6 @@ function editarMiCuenta(idUsuario){
       console.error('Error al mostrarMiCuenta', error);
     })
 }
-
 
 //Funcion para cambiar la contraseña del usuario admin
 function cambiarPasswordAdmin(idAdmin){

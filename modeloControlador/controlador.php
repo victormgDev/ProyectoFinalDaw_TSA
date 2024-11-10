@@ -66,72 +66,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 //Funcion para realizar la busqueda de la descripcion del avion
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'buscarDescripcion'){
-$fabricante = $_POST['fabricante'];
+  $fabricantesAviones = ['boeing', 'airbus', 'bombardier', 'atr', 'gulfstream'];
+$fabricante = strtolower(trim($_POST['fabricante']));
 $modelo = $_POST['modelo'];
 
-$tituloBusqueda = urlencode(str_replace(' ', '_', $fabricante . ' ' . $modelo));
+if (in_array($fabricante, $fabricantesAviones)){
+  $tituloBusqueda = urlencode(str_replace(' ', '_', $fabricante . ' ' . $modelo));
   $url = "https://es.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&titles=$tituloBusqueda";
 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_USERAGENT, 'AplicacionTsa/1.0(victormon.7777@gmail.com)');
-$respuesta = curl_exec($ch);
-curl_close($ch);
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_USERAGENT, 'AplicacionTsa/1.0(victormon.7777@gmail.com)');
+  $respuesta = curl_exec($ch);
+  curl_close($ch);
 
-if ($respuesta) {
-  $datos = json_decode($respuesta, true);
-  $paginas = $datos['query']['pages'];
+  if ($respuesta) {
+    $datos = json_decode($respuesta, true);
+    $paginas = $datos['query']['pages'];
 
-  $descripcion = '';
-  foreach ($paginas as $pagina) {
-  if (isset($pagina['extract'])) {
-    $descripcion .= $pagina['extract'] . ', ';
-    break;
+    $descripcion = '';
+    foreach ($paginas as $pagina) {
+      if (isset($pagina['extract'])) {
+        $descripcion .= $pagina['extract'] . ', ';
+        break;
+      }
+    }
+    preg_match('/\b(\d+)\s*pasajeros?\b/i', $descripcion, $capacidad);
+    preg_match('/alcance.*?(\d+(?:\s?\d{3})*)\s?(km|kilómetros)/i', $descripcion, $alcance);
+    preg_match('/velocidad.*?(\d+(?:\s?\d{3})*)\s?(km\/h)/i', $descripcion, $velocidad);
+    $capacidad_texto = isset($capacidad[1]) ? $capacidad[1] : '0';
+    $alcance_texto = isset($alcance[1]) ? $alcance[1] : '0';
+    $velocidad_texto = isset($velocidad[1]) ? $velocidad[1] : '0';
+
+
+    // Mostrar la descripción y los detalles encontrados
+    echo '<h5>Descripción del avión:</h5>';
+    echo "<div id='descripcionAvion'><p>$descripcion</p></div>";
+
+    echo '<h5>Capacidad:</h5>';
+    if ($capacidad_texto === '0') {
+      echo '<p>No se encontró información de capacidad.</p>';
+      echo '<label for="capacidadManual">Ingrese la capacidad:</label>';
+      echo '<div id="capacidadAvion"><input type="text" id="capacidadManual" name="capacidadManual" class="form-control" placeholder="Ej. 300 pasajeros" required></div>';
+    } else {
+      echo '<div id="capacidadAvion"><p>' . $capacidad_texto . ' pasajeros</p></div>';
+    }
+    echo '<h5>Alcance:</h5>';
+    if ($alcance_texto === '0') {
+      echo '<p>No se encontró información de alcance.</p>';
+      echo '<label for="alcanceManual">Ingrese el alcance:</label>';
+      echo '<div id="alcanceAvion"><input type="text" id="alcanceManual" name="alcanceManual" class="form-control" placeholder="Ej. 15000 km" required></div>';
+    } else {
+      echo '<div id="alcanceAvion"><p>' .$alcance_texto . ' kilometros</p></div>';
+    }
+    echo '<h5>Velocidad:</h5>';
+    if ($velocidad_texto === '0') {
+      echo '<p>No se encontró información de la velocidad.</p>';
+      echo '<label for="velocidadManual">Ingrese la velocidad:</label>';
+      echo '<div id="velocidadAvion"><input type="text" id="velocidadManual" name="velocidadManual" class="form-control" placeholder="Ej. 900 km/h" required></div>';
+    } else {
+      echo '<div id="velocidadAvion"><p>' . $velocidad_texto . ' km/h</p></div>';
+    }
+    echo '<h5>Codigos icao del modelo</h5>';
+    echo '<label for="codigosIcao">Ingrese los codigos ICAO separados por una (,):</label>';
+    echo '<div id="codigosIcaoAvion"><input type="text" id="codigosIcao" name="codigosIcao" class="form-control" placeholder="Ej. B737, B38M" required></div>';
+  } else {
+    echo 'Error al conectar con Wikipedia.';
   }
-  }
-  preg_match('/\b(\d+)\s*pasajeros?\b/i', $descripcion, $capacidad);
-  preg_match('/alcance.*?(\d+(?:\s?\d{3})*)\s?(km|kilómetros)/i', $descripcion, $alcance);
-  preg_match('/velocidad.*?(\d+(?:\s?\d{3})*)\s?(km\/h)/i', $descripcion, $velocidad);
-  $capacidad_texto = isset($capacidad[1]) ? $capacidad[1] : '0';
-  $alcance_texto = isset($alcance[1]) ? $alcance[1] : '0';
-  $velocidad_texto = isset($velocidad[1]) ? $velocidad[1] : '0';
-
-
-        // Mostrar la descripción y los detalles encontrados
-        echo '<h5>Descripción del avión:</h5>';
-        echo "<div id='descripcionAvion'><p>$descripcion</p></div>";
-
-        echo '<h5>Capacidad:</h5>';
-        if ($capacidad_texto === '0') {
-          echo '<p>No se encontró información de capacidad.</p>';
-          echo '<label for="capacidadManual">Ingrese la capacidad:</label>';
-          echo '<div id="capacidadAvion"><input type="text" id="capacidadManual" name="capacidadManual" class="form-control" placeholder="Ej. 300 pasajeros" required></div>';
-        } else {
-          echo '<div id="capacidadAvion"><p>' . $capacidad_texto . ' pasajeros</p></div>';
-        }
-        echo '<h5>Alcance:</h5>';
-        if ($alcance_texto === '0') {
-          echo '<p>No se encontró información de alcance.</p>';
-          echo '<label for="alcanceManual">Ingrese el alcance:</label>';
-          echo '<div id="alcanceAvion"><input type="text" id="alcanceManual" name="alcanceManual" class="form-control" placeholder="Ej. 15000 km" required></div>';
-        } else {
-          echo '<div id="alcanceAvion"><p>' .$alcance_texto . ' kilometros</p></div>';
-        }
-        echo '<h5>Velocidad:</h5>';
-        if ($velocidad_texto === '0') {
-          echo '<p>No se encontró información de la velocidad.</p>';
-          echo '<label for="velocidadManual">Ingrese la velocidad:</label>';
-          echo '<div id="velocidadAvion"><input type="text" id="velocidadManual" name="velocidadManual" class="form-control" placeholder="Ej. 900 km/h" required></div>';
-        } else {
-          echo '<div id="velocidadAvion"><p>' . $velocidad_texto . ' km/h</p></div>';
-        }
-        echo '<h5>Codigos icao del modelo</h5>';
-        echo '<label for="codigosIcao">Ingrese los codigos ICAO separados por una (,):</label>';
-        echo '<div id="codigosIcaoAvion"><input type="text" id="codigosIcao" name="codigosIcao" class="form-control" placeholder="Ej. B737, B38M" required></div>';
-        } else {
-            echo 'Error al conectar con Wikipedia.';
-         }
+}else{
+  echo '<div class="alert alert-warning">No has introducido un fabricante de avion valido</div>';
+}
 
 }
 

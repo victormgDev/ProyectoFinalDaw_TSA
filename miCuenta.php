@@ -19,9 +19,6 @@ include 'templates/head.php';
           <div class="form-floating mb-3">
             <input type="text" class="form-control" id="usuarioEdit" name="usuarioEdit" placeholder="Nombre de usuario" required>
             <label for="usuarioEdit" class="form-label">Nombre</label>
-              <div class="valid-feedback position-absolute top-50 end-0 translate-middle me-2" id="checkUsuarioEdit" style="display: none">
-                  ✔️
-              </div>
               <div class="invalid-feedback">
                   El usuario debe de empezar por minimo 4 letras y le puede seguir un numero
               </div>
@@ -29,9 +26,6 @@ include 'templates/head.php';
             <div class="form-floating mb-3">
                 <input type="email" class="form-control " id="emailEdit" name="emailEdit" placeholder="Usuario@ejemplo.com" required >
                 <label for="emailEdit" class="form-label" >Usuario@ejemplo.com</label>
-                <div class="valid-feedback position-absolute top-50 end-0 translate-middle me-2" id="checkEmailEdit" style="display: none">
-                    ✔️
-                </div>
                 <div class="invalid-feedback">
                     El email debe comenzar por letra minuscula seguido de @ .com , .es o .org
                 </div>
@@ -39,9 +33,6 @@ include 'templates/head.php';
           <div class="form-floating mb-3">
             <input type="password" class="form-control" id="passwordEdit" name="passwordEdit" placeholder="Contraseña" required >
             <label for="passwordEdit" class="form-label">Contraseña</label>
-              <div class="valid-feedback position-absolute top-50 end-0 translate-middle me-2" id="checkPasswordEdit" style="display: none">
-                  ✔️
-              </div>
               <div class="invalid-feedback">
                   La contraseña debe tener al menos 6 caracteres, incluyendo letras o números.
               </div>
