@@ -3,7 +3,7 @@ include 'modeloControlador/controlador.php';
 include 'templates/head.php';
 ?>
 
-<div class="container mt-5" aria-label="Contenedor principal de Login">
+<div class="container-fluid mt-5" aria-label="Contenedor principal de Login">
   <h1 class="text-center animate__animated animate__flip ">Iniciar Sesión</h1>
   <div class="row justify-content-center" aria-label="Fila del formulario">
     <div id="alertFormIniciarSesion" class="row justify-content-center" aria-label="Div para alertas"></div>

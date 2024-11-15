@@ -34,5 +34,7 @@ include 'templates/head.php';
 
 <div class="container-fluid mt-3" id="resultados">
 </div>
+
 <?php include 'templates/footer.php'; ?>
+
 

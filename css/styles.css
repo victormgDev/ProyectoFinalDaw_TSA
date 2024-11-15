@@ -11943,4 +11943,22 @@ tr:hover {
   opacity: 100%;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+  flex: 1;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  padding: 10px 20px;
+}
+
 /*# sourceMappingURL=styles.css.map */
