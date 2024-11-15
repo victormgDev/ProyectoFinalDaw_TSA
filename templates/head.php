@@ -53,6 +53,9 @@ session_start();
           <li class="nav-item">
             <a class="nav-link" href="/appTsa/enciclopedia.php">Enciclopedia de Aviones</a>
           </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/appTsa/faqs.php">FAQs</a>
+            </li>
         <?php elseif (isset($_SESSION['usuario'])):?>
 
           <li class="nav-item">
@@ -74,6 +77,9 @@ session_start();
               <i class="bi bi-box-arrow-left"> Cerrar Sesion</i>
             </a>
           </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/appTsa/faqs.php">FAQs</a>
+            </li>
         <?php else: ?>
           <li class="nav-item">
             <a class="nav-link" href="/appTsa/login.php">Iniciar Sesión</a>
@@ -81,6 +87,9 @@ session_start();
           <li class="nav-item">
             <a class="nav-link" href="/appTsa/enciclopedia.php">Enciclopedia de Aviones</a>
           </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/appTsa/faqs.php">FAQs</a>
+            </li>
         <?php endif;?>
       </ul>
       <div class="dropdown">
