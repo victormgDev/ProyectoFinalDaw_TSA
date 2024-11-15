@@ -2,7 +2,15 @@
 include 'modeloControlador/controlador.php';
 include 'templates/head.php';
 ?>
+<?php
+if ($idUsuario = existeUsuario()){
 
+}else{
+    echo '<div class="alert alert-danger alert-dismissible">Tienes que iniciar sesion</div>';
+    include 'templates/footer.php';
+    exit();
+}
+?>
 <div class="container-fluid mt5">
   <h3 class="text-center"> Mi Cuenta</h3>
   <div class="row justify-content-center" aria-label="Div para datos de Cuenta">
@@ -37,7 +45,6 @@ include 'templates/head.php';
                   La contraseña debe tener al menos 6 caracteres, incluyendo letras o números.
               </div>
           </div>
-
           <button id="btnUsuarioEdit" type="submit" class="btn btn-outline-primary w-25 mx-auto d-block mb-3">Guardar</button>
         </form>
       </div>

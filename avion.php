@@ -3,10 +3,12 @@ include 'templates/head.php';
 include 'modeloControlador/controlador.php';
 ?>
 <script src="js/app.js"></script>
-<div class="container-fluid" aria-label="Formulario para crear Avion">
+<?php
+if ($idUsuario = existeUsuario()){
+    echo '
+    <div class="container-fluid" aria-label="Formulario para crear Avion">
   <div class="row justify-content-center">
     <div class="col col-9">
-
       <form method="post" id="formCrearAvion" class="form-control" enctype="multipart/form-data"> <!-- enctype="multipart/form-data" para permitir la subida de archivos -->
         <h3 class="text-center mb-3">Crear Avion</h3>
         <label for="fabricante"  class="form-label">Fabricante</label>
@@ -24,7 +26,12 @@ include 'modeloControlador/controlador.php';
       <div id="alertCrearAvion"> </div>
     </div>
   </div>
-</div>
+</div>';
+} else{
+    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">Tienes que iniciar sesion</div>';
+}
+?>
+
 <footer>
   <?php include 'templates/footer.php'; ?>
 </footer>
