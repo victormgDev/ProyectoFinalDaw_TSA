@@ -399,7 +399,6 @@ function mostrarRutas($origen, $destino){
           } else {
             echo '<p class="card-text">Código IATA del Avión no disponible.</p>';
           }
-          echo '<p class="card-text">Estado: ' . $estadoEs . "<br></p>";
           if (isset($vuelo['live']['latitude']) && isset($vuelo['live']['longitude'])) {
             if (isset($_SESSION['id'])){
               $idUsuario=$_SESSION['id'];

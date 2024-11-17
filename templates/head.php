@@ -84,6 +84,9 @@ session_start();
           <li class="nav-item">
             <a class="nav-link" href="/appTsa/login.php">Iniciar Sesión</a>
           </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/appTsa/registrar.php">Registrate</a>
+            </li>
           <li class="nav-item">
             <a class="nav-link" href="/appTsa/enciclopedia.php">Enciclopedia de Aviones</a>
           </li>
