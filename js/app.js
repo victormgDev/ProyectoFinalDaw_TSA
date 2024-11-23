@@ -5,22 +5,17 @@ function cambiarTema(tema) {
   localStorage.setItem('tema', tema); // Guardar en localStorage
 
   const iconoTema = document.getElementById('temaIcono');
+  const body = document.body;
   if (tema === 'light') {
     iconoTema.classList.remove('bi-moon-fill');
     iconoTema.classList.add('bi-sun-fill');
+    body.classList.remove('dark-mode');
   } else {
     iconoTema.classList.remove('bi-sun-fill');
     iconoTema.classList.add('bi-moon-fill');
+    body.classList.add('dark-mode');
   }
 }
-
-// Asignar eventos a los botones del menú desplegable de seleccion de tema
-document.getElementById('temaLight').addEventListener('click', function() {
-  cambiarTema('light');
-});
-document.getElementById('temaDark').addEventListener('click', function() {
-  cambiarTema('dark');
-});
 
 // Aplicar el tema guardado al cargar la página
 window.onload = function() {

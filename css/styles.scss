@@ -30,7 +30,8 @@ $indigo-500: $green-500;
   background-color: $indigo-500 !important;
 }
 .btn-outline-primary,.border{
-  color: $indigo-500 !important;
+  background-color: rgba(25,135,84,0.9) !important;
+  color: $gray-400 !important;
   border-color: $indigo-500 !important;
 }
 .btn-outline-primary:hover,.btn-outline-primary:focus, li:hover {
@@ -86,8 +87,24 @@ html, body{
   flex: 1;
 }
 body{
+  background-image: url('/appTsa/img/fondoPresentacion.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   display: flex;
   flex-direction: column;
+}
+body.dark-mode{
+  background-image: url('/appTsa/img/fondoPresentacionDark.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+}
+.card {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
 }
 .footer{
   padding: 10px 20px;

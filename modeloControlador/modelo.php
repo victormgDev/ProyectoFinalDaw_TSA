@@ -309,7 +309,7 @@ function autocompletarDestino($autoCompletar){
 //Funcion para mostrar las rutas en la pagina vuelo actual
 function mostrarRutas($origen, $destino){
   $conn=crearConexion();
-  //Coordenadas de Orgien
+  //Recuperar las coordenadas de Orgien
   $sql="SELECT latitud, longitud FROM aeropuertos WHERE iata like ?";
   $stmt = $conn->prepare($sql);
   $stmt->bind_param("s", $origen);
@@ -321,7 +321,7 @@ function mostrarRutas($origen, $destino){
       $lngOrigen=$row['longitud'];
     }
   }
-  //Coordenadas de Destino
+  //Recuperar las coordenadas de Destino
   $sql1="SELECT latitud, longitud FROM aeropuertos WHERE iata like ?";
   $stmt1 = $conn->prepare($sql1);
   $stmt1->bind_param("s", $destino);
@@ -334,18 +334,20 @@ function mostrarRutas($origen, $destino){
     }
   }
   $claveApi = '417a76ab448ab04d5a14accd43d3f95c'; //clave para hacer las consultas
-  //Url de aviaton stack para consultar las rutas en tiempo real
+  //Url de aviationstack para consultar las rutas en tiempo real
   $url= "http://api.aviationstack.com/v1/flights?access_key=$claveApi&dep_iata=$origen&arr_iata=$destino";
 
   //inciamos Curl para aviaton stak
-  $canal = curl_init($url);
-  curl_setopt($canal,CURLOPT_URL, $url);
-  curl_setopt($canal,CURLOPT_RETURNTRANSFER,true);
-  $respuesta  = curl_exec($canal);
-  curl_close($canal);
+  $canal = curl_init($url);//iniciamos la sesion curl con la Url y la clave Api
+  curl_setopt($canal,CURLOPT_URL, $url);//Especificamos la Url a la que vamos hacer la solicitud
+  curl_setopt($canal,CURLOPT_RETURNTRANSFER,true); // Indicamos que nos devuelva una cadena
+  // en lugar de imprimirla directamente
+  $respuesta  = curl_exec($canal);//Ejecutamos la solicitud y guardamos en variable
+  curl_close($canal);//Cerramos la sesion Curl
 
   //Descodificamos el JSON
-  $rutas = json_decode($respuesta, true);
+  $rutas = json_decode($respuesta, true);//Descodificamos el JSon e indicamos con el
+  //parametro true que convierta en un array en vez de un objeto
 
   //Comprobamo si se han obtenido respuestas
   if (isset($rutas['data']) && !empty($rutas['data'])) { //comprobamos que existe el array $rutas y preguntamos si no esta vacio

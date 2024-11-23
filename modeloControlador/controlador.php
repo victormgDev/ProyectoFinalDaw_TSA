@@ -250,20 +250,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])&& $_POST['a
       echo "<script>var idUsuario= $idUsuario</script>";
       $origen = $_POST['origen'];
       $destino = $_POST['destino'];
-      guardarIata($idUsuario, $origen, $destino);//Funcion definida en controlador.php para guardar las consultas de rutas
+      guardarIata($idUsuario, $origen, $destino);//Funcion definida en modelo.php para guardar las consultas de rutas
       mostrarRutas($origen, $destino);
-
     }
     if (isset($_SESSION['admin'])) {
       $idAdmin = $_SESSION['idAdmin'];
       echo "<script>var idUsuario= $idAdmin</script>";
       $origen = $_POST['origen'];
       $destino = $_POST['destino'];
-      guardarIataAdmin($idAdmin, $origen, $destino);//Funcion definida en controlador.php para guardar las consultas de rutas
+      guardarIataAdmin($idAdmin, $origen, $destino);//Funcion definida en modelo.php para guardar las consultas de rutas
       mostrarRutas($origen, $destino);
     }
   }
-
 }
 
 //Funcion para mostrar el avion en la busqueda

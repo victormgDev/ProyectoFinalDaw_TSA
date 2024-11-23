@@ -11884,7 +11884,8 @@ textarea.form-control-lg {
 }
 
 .btn-outline-primary, .border {
-  color: #198754 !important;
+  background-color: rgba(25, 135, 84, 0.9) !important;
+  color: #ced4da !important;
   border-color: #198754 !important;
 }
 
@@ -11953,8 +11954,26 @@ html, body {
 }
 
 body {
+  background-image: url("/appTsa/img/fondoPresentacion.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   display: flex;
   flex-direction: column;
+}
+
+body.dark-mode {
+  background-image: url("/appTsa/img/fondoPresentacionDark.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
 }
 
 .footer {

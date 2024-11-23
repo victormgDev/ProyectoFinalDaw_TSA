@@ -20,7 +20,7 @@ include 'templates/head.php';
         <button type="submit" class="btn btn-outline-primary w-100" onclick="iniciarSesion()">Iniciar Sesión</button>
       </form>
       <div class="text-center mt-3">
-        <a href="/appTsa/registrar.php" class="btn btn-secondary w-100">Registrarse</a>
+        <a href="/appTsa/registrar.php" class="btn btn-outline-primary w-100">Registrarse</a>
       </div>
     </div>
   </div>
