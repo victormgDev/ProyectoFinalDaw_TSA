@@ -6,7 +6,7 @@ include 'modeloControlador/controlador.php';
 <?php
 if ($idUsuario = existeUsuario()){
     echo '
-    <div class="container-fluid" aria-label="Formulario para crear Avion">
+    <div class="container-fluid" aria-label="Contenedor del formulario para crear Avion">
   <div class="row justify-content-center">
     <div class="col col-9">
       <form method="post" id="formCrearAvion" class="form-control" enctype="multipart/form-data"> <!-- enctype="multipart/form-data" para permitir la subida de archivos -->

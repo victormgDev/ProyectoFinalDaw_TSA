@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
   iniciarSesion($email, $password);
 }
 
+//Aqui recibimos los datos del formulario de registrar usuario
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'registrarUsuario') {
   //Expresion regular para la contraseña de al menos 6 caracteres
   function validarPassword($password){

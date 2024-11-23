@@ -98,7 +98,7 @@ function registrarUsuario($usuario, $email, $password){
 
   if ($consulta->num_rows > 0) {
     echo '<div class="col-9 alert alert-danger text-center" role="alert">El usuario ya existe</div>';
-  }else{
+  }else{ // Si no existe el usuario lo creamos
     $sql1="INSERT INTO usuarios (usuario, email, password) VALUES (?,?,?)";
     $stmt = $conn->prepare($sql1);
     $stmt->bind_param('sss', $usuario, $email, $password);
@@ -111,7 +111,6 @@ function registrarUsuario($usuario, $email, $password){
     $stmt->close();
     $conn->close();
   }
-
 }
 
 //Funcion para guardar en la BD los datos del avion a crear

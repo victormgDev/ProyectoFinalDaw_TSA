@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const usuarioInput = document.getElementById('usuarioRegistro');
   const emailInput = document.getElementById('emailRegistro');
   const passwordInput = document.getElementById('passwordRegistro');
-  const registerButton = document.getElementById('btnRegistro'); // Obtén el botón de registro
+  const registerButton = document.getElementById('btnRegistro');
 
   // Desactiva el botón de registro inicialmente
   registerButton.disabled = true;
