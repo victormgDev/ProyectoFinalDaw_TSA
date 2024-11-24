@@ -274,22 +274,17 @@ function editarAvion(idAvion){
 
 //Funcion para mostrar mapa en vueloActual.php
 var map; // variable map para que este al alcance de la funcion  marcadorAvion
-function mostrarMapa(){
- src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCl4vk039FPjcdPlIDjZ3dQutSH_bMnuqI";
-  function initMap() {
-    var location = { lat: 40.416775, lng: -3.703790 }; // Coordenadas de Madrid
-    map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 6,
-      center: location
-    });
-
-    var marker = new google.maps.Marker({
-      position: location,
-      map: map,
-      title: "Madrid"
-    });
-  }
-  window.onload = initMap;
+function initMap() {
+  var location = { lat: 40.416775, lng: -3.703790 }; // Coordenadas de Madrid
+  map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 6,
+    center: location
+  });
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map,
+    title: "Madrid"
+  });
 }
 
 //Autocompletar para origen y destino
@@ -394,7 +389,6 @@ function trazarRutaOrigen(lat, lng, latOrigen, lngOrigen) {
     strokeOpacity: 1.0, // Opacidad de la línea
     strokeWeight: 2 // Grosor de la línea
   });
-
   // Añade la línea al mapa
   ruta.setMap(map);
 }
@@ -457,7 +451,7 @@ function marcadorAvion(lat, lng, direccion, latOrigen, lngOrigen, latDestino, ln
 
   markerOverlay.setMap(map);  // Agregar el overlay al mapa
 
-  //Llamamos a la funcion para trazal la ruta
+  //Llamamos a la funcion para trazar la ruta
   trazarRutaOrigen(latOrigen, lngOrigen, lat, lng);
   trazarRutaDestino(latDestino, lngDestino, lat, lng);
 }

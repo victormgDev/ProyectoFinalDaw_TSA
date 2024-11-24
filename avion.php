@@ -6,7 +6,7 @@ include 'modeloControlador/controlador.php';
 <?php
 if ($idUsuario = existeUsuario()){
     echo '
-    <div class="container-fluid" aria-label="Contenedor del formulario para crear Avion">
+    <div class="container-fluid " aria-label="Contenedor del formulario para crear Avion">
   <div class="row justify-content-center">
     <div class="col col-9">
       <form method="post" id="formCrearAvion" class="form-control" enctype="multipart/form-data"> <!-- enctype="multipart/form-data" para permitir la subida de archivos -->
@@ -19,9 +19,9 @@ if ($idUsuario = existeUsuario()){
 
         <label for="imagen" id="imagen" class="form-label">Imagen</label>
         <input type="file" class="form-control" id="imagen" name="imagen" required>
-        <button type="button" class="btn btn-outline-primary w-25 mt-3 mx-auto d-block" onclick="buscarDescripcion()">Buscar Descripcion</button>
+        <button type="button" class="btn btn-outline-primary w-50 mt-3 mx-auto d-block" onclick="buscarDescripcion()">Buscar Descripcion</button>
         <div id="divDescripcionAvion" class="mt-3"></div>
-        <button type="submit" class="btn btn-outline-primary w-25 mt-3 mx-auto d-block" onclick="crearAvionBusqueda()">Crear</button>
+        <button type="submit" class="btn btn-outline-primary w-50 mt-3 mx-auto d-block" onclick="crearAvionBusqueda()">Crear</button>
       </form>
       <div id="alertCrearAvion"> </div>
     </div>

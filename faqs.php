@@ -62,11 +62,10 @@ include 'templates/head.php';
                         </h2>
                         <div id="faq5" class="accordion-collapse collapse" aria-labelledby="faqHeading5" data-bs-parent="#faqAccordion">
                             <div class="accordion-body">
-                                Opera, Google Chorme, Edege, Mozilla Firefox
+                                Opera, Google Chorme, Microsoft Edge, Mozilla Firefox
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

@@ -219,7 +219,7 @@ function detalleAvion(){
 
       echo '<h2>'.htmlspecialchars($row['fabricante']).' - '.htmlspecialchars($row['modelo']).'</h2>';
       echo '<img src="' . htmlspecialchars($row["imagen_url"]) . '" class="img-fluid rounded-3" alt="imagen avión">';
-      echo '<div id="divDescripcion">';
+      echo '<div id="divDescripcion" class="bg-body mt-2">';
       echo '<h3>Descripcion:</h3><p> '.htmlspecialchars($row["descripcion"]).'</p>';
       echo '</div>';
       echo '<h3>Informacion añadida</h3><p> '.htmlspecialchars($row['descripcion_modificada']) .'</p>';

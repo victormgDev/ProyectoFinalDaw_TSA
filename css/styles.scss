@@ -2,7 +2,7 @@
 @import "../node_modules/animate.css/animate.css";
 
 //El color de la barra lo cambiamos de linght a indigo*/
-$indigo-500: $green-500;
+$indigo-500: rgba(25,135,84,0.95);
 
 /*cambiamos el color al boton para que se bea en gris y cuando pasamos por encima sea blanco*/
 
@@ -11,6 +11,7 @@ $indigo-500: $green-500;
 }
 .bi:hover,.nav-link:hover,.card-body:hover{
   color:white !important;
+  background-color: transparent;
 }
 
 /*Quitamos el borde al boton*/
@@ -25,6 +26,15 @@ $indigo-500: $green-500;
 
 .bg-light,{
   background-color: $indigo-500 !important;
+}
+.bg-body{
+  background-color: rgba(25,135,84,0.8) !important;
+  border: 2px solid $indigo-500;
+  border-radius: 15px;
+  padding: 20px;
+}
+.form-control, .form-select{
+  background-color: rgba(255,255,255,0.8) !important;
 }
 .card-header,.card-body{
   background-color: $indigo-500 !important;
