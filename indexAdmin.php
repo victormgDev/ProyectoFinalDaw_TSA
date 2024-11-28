@@ -24,6 +24,29 @@ if (isset($_SESSION['admin'])){
             </div>
           </div>
         </div>
+        
+        <div class="modal fade" id="confirmModalRevisar" tabindex="-1" role="dialog" aria-labelledby="confirmModalRevisarLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Revision</h5>
+                <button type="button" class="close" id="btnCerrarRevision" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div id="revInfoAvion"></div>
+              </div>
+              <div class="modal-footer">
+              <button type="button" class="btn btn-success" id="confirmarRevision">Validar</button>
+              <button type="button" class="btn btn-warning" id="modificarRevision">Modificar</button>
+                <button type="button" class="btn btn-danger" id="denegarRevision" data-dismiss="modal">Denegar</button>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        
     <h3 class="text-center border-bottom border-4"> Pagina Administrador</h3>
     <div class="row justify-content-center">
         <div class="col-9 ">

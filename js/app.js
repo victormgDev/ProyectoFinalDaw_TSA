@@ -57,10 +57,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const usuarioInput = document.getElementById('usuarioRegistro');
   const emailInput = document.getElementById('emailRegistro');
   const passwordInput = document.getElementById('passwordRegistro');
-  const registerButton = document.getElementById('btnRegistro');
+  const botonRegistro = document.getElementById('btnRegistro');
 
   // Desactiva el botón de registro inicialmente
-  registerButton.disabled = true;
+  botonRegistro.disabled = true;
   emailInput.disabled = true;
   passwordInput.disabled = true;
   usuarioInput.addEventListener('input', function() {
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       this.classList.remove("is-valid");
       this.classList.add("is-invalid");
-      registerButton.disabled = true; // Desactivar el botón de registro
+      botonRegistro.disabled = true; // Desactivar el botón de registro
       emailInput.disabled = true;
     }
   });
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       this.classList.remove("is-valid");
       this.classList.add("is-invalid");
-      registerButton.disabled = true; // Desactivar el botón de registro
+      botonRegistro.disabled = true; // Desactivar el botón de registro
       passwordInput.disabled = true;
 
     }
@@ -105,11 +105,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (regex.test(password)) {
       this.classList.remove("is-invalid");
       this.classList.add("is-valid");
-      registerButton.disabled = false; // Activar el botón de registro
+      botonRegistro.disabled = false; // Activar el botón de registro
     } else {
       this.classList.remove("is-valid");
       this.classList.add("is-invalid");
-      registerButton.disabled = true; // Desactivar el botón de registro
+      botonRegistro.disabled = true; // Desactivar el botón de registro
     }
   });
 });
@@ -245,8 +245,9 @@ function mostrarAviones() {
 
 //Funcion para guardar modificaciones del avion de la pagina detallesAvion.php
 function editarAvion(idAvion){
-  console.log(idAvion);
   event.preventDefault();
+  var boton = document.getElementById('editAvion');
+  boton.textContent = 'Guardando...'
   const descripcionGuardada = document.getElementById('divDescripcion').innerText;
   let form =document.querySelector('#formEditAvion');
 
@@ -601,8 +602,8 @@ function cambiarPasswordAdmin(idAdmin){
 
 //Funcion para eliminar usuario desde indexAdmin
 function eliminarUsuario(idUsuario){
-  var boton = document.getElementById('btnEliminarUsuario');
-  var spinner = document.getElementById('spinnerUsuario');
+  var boton = document.getElementById('btnEliminarUsuario'+idUsuario);
+  var spinner = document.getElementById('spinnerUsuario'+idUsuario);
   $('#confirmModal').modal('show');
   document.getElementById('cancelarEliminar').addEventListener('click', function (){
     $('#confirmModal').modal('hide');
@@ -627,7 +628,7 @@ function eliminarUsuario(idUsuario){
         document.querySelector('#alertUsuariosMostrados').innerHTML=data;
         setTimeout(function (){
           location.reload();
-        }, 3500);
+        }, 1500);
       })
       .catch(error => {
         console.error('Error al eliminar el usuario', error);
@@ -642,10 +643,80 @@ function modificarAvion(id){
   window.location.href= 'detalleAvion.php?id='+id;
 }
 
+//Funcion para revisar la informacion añadida
+function revisarAvion(idAvion){
+  var boton =  document.getElementById('btnRevisarAvion'+idAvion);
+  $('#confirmModalRevisar').modal('show');
+  document.getElementById('modificarRevision').addEventListener('click', function (){
+    window.location.href = '/appTsa/detalleAvion.php?id='+idAvion;
+  })
+  fetch('modeloControlador/controladorAdmin.php', {
+    method: 'POST',
+    body: new URLSearchParams({
+      'idAvion': idAvion,
+      'action': 'mostrarRevision'
+    })
+  })
+      .then(response =>response.text())
+      .then(data => {
+        document.querySelector('#revInfoAvion').innerHTML= data
+      })
+      .catch(error => {
+        console.error('Error al mostrar la revision', error);
+      });
+
+  document.getElementById('btnCerrarRevision').addEventListener('click', function (){
+    $('#confirmModalRevisar').modal('hide');
+  })
+  document.getElementById('denegarRevision').addEventListener('click', function (){
+    $('#confirmModal').modal('hide');
+    fetch('modeloControlador/controladorAdmin.php', {
+      method: 'POST',
+      body: new URLSearchParams({
+        'idAvion': idAvion,
+        'action': 'denegarRevision'
+      })
+    })
+        .then(response =>response.text())
+        .then(data => {
+          document.querySelector('#alertAvionesMostrados').innerHTML= data
+          setTimeout(function (){
+            location.reload();
+          }, 1000);
+        })
+        .catch(error => {
+          console.error('Error al denegar la revision', error);
+          boton.disabled=false;
+        });
+  });
+  document.getElementById('confirmarRevision').addEventListener('click', function (){
+    $('#confirmModal').modal('hide');
+    boton.disabled=true;
+    fetch('modeloControlador/controladorAdmin.php', {
+      method: 'POST',
+      body: new URLSearchParams({
+        'idAvion': idAvion,
+        'action': 'revisarAvion'
+      })
+    })
+        .then(response =>response.text())
+        .then(data => {
+          document.querySelector('#alertAvionesMostrados').innerHTML= data
+          setTimeout(function (){
+            location.reload();
+          }, 1000);
+        })
+        .catch(error => {
+          console.error('Error al confirmar la revision', error);
+          boton.disabled=false;
+        });
+  });
+}
+
 //Funcion para eliminar el Avion desde Admin
 function eliminarAvion(idAvion){
-  var boton =  document.getElementById('btnEliminarAvion');
-  var spinner =  document.getElementById('spinnerAvion');
+  var boton =  document.getElementById('btnEliminarAvion'+idAvion);
+  var spinner =  document.getElementById('spinnerAvion'+idAvion);
   $('#confirmModal').modal('show');
   document.getElementById('cancelarEliminar').addEventListener('click', function (){
     $('#confirmModal').modal('hide');
@@ -670,7 +741,7 @@ function eliminarAvion(idAvion){
         document.querySelector('#alertAvionesMostrados').innerHTML= data
         setTimeout(function (){
           location.reload();
-        }, 3500);
+        }, 1500);
       })
       .catch(error => {
         console.error('Error al eliminar el usuario', error);
@@ -682,8 +753,8 @@ function eliminarAvion(idAvion){
 
 //Funcion para eliminar Busquedas
 function eliminarBusqueda(idBusqueda){
-  var boton = document.getElementById('btnEliminarBusqueda');
-  var spinner = document.getElementById('spinner');
+  var boton = document.getElementById('btnEliminarBusqueda'+idBusqueda);
+  var spinner = document.getElementById('spinner'+idBusqueda);
   $('#confirmModal').modal('show');
   document.getElementById('cancelarEliminar').addEventListener('click', function (){
     $('#confirmModal').modal('hide');
@@ -708,7 +779,7 @@ function eliminarBusqueda(idBusqueda){
         document.querySelector('#alertBusquedasMostradas').innerHTML = data;
         setTimeout(function (){
           location.reload();
-        }, 3500);
+        }, 1500);
 
       })
       .catch(error => {
@@ -747,6 +818,67 @@ function crearAvionAdmin(){
 }
 
 //Funcion para recibir los datos del formulario de mi cuenta Admin para editar los datos de Admin
+document.addEventListener('DOMContentLoaded', function() {
+  const usuarioAdminEdit = document.getElementById('usuario');
+  const emailAdminEdit = document.getElementById('email');
+  const passwordAdminEdit = document.getElementById('password');
+  const botonAdminEdit = document.getElementById('guardarAdmin');
+
+  // Desactiva el botón de guardar inicialmente
+  botonAdminEdit.disabled = true;
+  emailAdminEdit.disabled = true;
+  passwordAdminEdit.disabled = true;
+  usuarioAdminEdit.addEventListener('input', function() {
+    const usuario = this.value;
+    const regex = /^[A-Za-z]{4,}[0-9]*$/;
+
+    if (regex.test(usuario)) {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      emailAdminEdit.disabled = false;
+
+    } else {
+      this.classList.remove("is-valid");
+      this.classList.add("is-invalid");
+      botonAdminEdit.disabled = true; // Desactivar el botón de registro
+      emailAdminEdit.disabled = true;
+    }
+  });
+
+  emailAdminEdit.addEventListener('input', function() {
+    const email = this.value;
+    const regex = /^[a-z]{4,}@tsa\.com$/;
+
+    if (regex.test(email)) {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      passwordAdminEdit.disabled = false;
+
+    } else {
+      this.classList.remove("is-valid");
+      this.classList.add("is-invalid");
+      botonAdminEdit.disabled = true; // Desactivar el botón de registro
+      passwordAdminEdit.disabled = true;
+
+    }
+  });
+
+  passwordAdminEdit.addEventListener('input', function() {
+    const password = this.value;
+    const regex = /^[A-Za-z0-9]{6,}$/;
+
+    if (regex.test(password)) {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      botonAdminEdit.disabled = false; // Activar el botón de registro
+    } else {
+      this.classList.remove("is-valid");
+      this.classList.add("is-invalid");
+      botonAdminEdit.disabled = true; // Desactivar el botón de registro
+    }
+  });
+});
+
 function editarMiCuentaAdmin(idAdmin){
   event.preventDefault();
   console.log(idAdmin);

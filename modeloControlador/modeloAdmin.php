@@ -14,50 +14,6 @@ function cerrarConexion($connexion){
   mysqli_close($connexion);
 }
 
-//Funcion para iniciar Sesion como Admin
-/*function iniciarSesionAdmin($emailAdmin, $passwordAdmin){
-  $conn=crearConexion();
-  $sql= "SELECT * FROM usuario_admin WHERE email=?";
-  $stmt=$conn->prepare($sql);
-  $stmt->bind_param("s", $emailAdmin);
-  $stmt->execute();
-  $result = $stmt->get_result();
-
-  if ($result->num_rows == 1) {
-    $row = $result->fetch_assoc();
-    if ($passwordAdmin === $row['password'] || password_verify($passwordAdmin, $row['password'])) {
-      session_start();
-      $_SESSION['idAdmin'] = $row['id'];
-      $idAdmin = $row['id'];
-      $_SESSION['admin'] = $row['usuario'];
-      $_SESSION['emailAdmin'] = $row['email'];
-
-      if ($row['password_cambiada'] == 0){
-        //header('Location: indexAdmin.php' );
-        $formulario='
-                <form id="formCambiarPassword" method="POST" onsubmit="cambiarPasswordAdmin('.$idAdmin.')"  aria-label="Formulario para Iniciar Sesion como Admin">
-                <div class="form-floating mb-3">
-                    <input type="password" class="form-control mt-3" id="cambioPasswordAdmin" name="cambioPasswordAdmin" placeholder="Contraseña" required>
-                    <label for="cambioPasswordAdmin" class="form-label">Contraseña</label>
-                </div>
-                <button type="submit" class="btn btn-outline-primary mb-3" >Guardar Cambios</button>
-            </form>
-            <div id="alertCambioPass"></div>';
-        echo $formulario;
-
-      }else{
-        echo '<div class="alert alert-success">Ha iniciado sesion como Adminsitrador</div>';
-      }
-    }else {
-      echo '<div class="alert alert-warning">La Contraseña no coincide</div>';
-    }
-  }else {
-    echo '<div class="alert alert-warning">Usuario no encontrado</div>';
-  }
-  $stmt->close();
-  $conn->close();
-}*/
-
 //Funcion para cambiar el Password del Admin
 function cambiarPasswordAdmin($idAdmin, $nuevoPasswordAdmin){
   $conn=crearConexion();
@@ -93,8 +49,8 @@ function mostrarUsuarios(){
               <td>" .$row['usuario'].  "</td>
               <td>" .$row['email'].  "</td>
               <td>
-                <button id='btnEliminarUsuario' class='btn btn-danger' onclick='eliminarUsuario(".$row['id'].")'>
-                <span id='spinnerUsuario' class='spinner-border spinner-border-sm d-none'></span>
+                <button id='btnEliminarUsuario".$row['id']."' class='btn btn-danger' onclick='eliminarUsuario(".$row['id'].")'>
+                <span id='spinnerUsuario".$row['id']."' class='spinner-border spinner-border-sm d-none'></span>
                  Eliminar
                  </button>
               </td>
@@ -140,10 +96,16 @@ function mostrarAvionesAdmin(){
               <td>" .$row['modelo'].  "</td>
               <td>
                 <button class='btn btn-warning' onclick='modificarAvion(".$row['id'].")'>Modificar</button>
-                <button id='btnEliminarAvion' class='btn btn-danger ' onclick='eliminarAvion(".$row['id'].")'>
-                <span id='spinnerAvion' class='spinner-border spinner-border-sm d-none'></span>
+                <button id='btnEliminarAvion".$row['id']."' class='btn btn-danger ' onclick='eliminarAvion(".$row['id'].")'>
+                <span id='spinnerAvion".$row['id']."' class='spinner-border spinner-border-sm d-none'></span>
                 Eliminar
-                </button>
+                </button>";
+                if($row['estado_revision'] == 1){
+                  echo "
+                  <button id='btnRevisarAvion".$row['id']."' class='btn btn-warning' onclick='revisarAvion(".$row['id'].")'>Revisar</button>
+                  ";
+                }
+      echo "
               </td>
               </tr>";
     }
@@ -165,6 +127,59 @@ function eliminarAvion($idAvion){
   }
   $stmt->close();
   $conn->close();
+}
+
+//Funcion para mostrar la informacion añadida por el usuario en el modal de confirmacion
+function mostrarRevision($idAvion){
+  $conn= crearConexion();
+  $sql = "SELECT descripcion_modificada FROM aviones WHERE id=?";
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param('i', $idAvion);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  if ($result->num_rows>0){
+    $row = $result->fetch_assoc();
+      echo "
+      <p>" . htmlspecialchars($row['descripcion_modificada']) . "</p>
+      ";
+  }else{
+    echo "
+    <p> No ha recuperado informacion añadida del avion con ID: " . $idAvion ."</p>
+    ";
+  }
+  $stmt->close();
+  $conn->close();
+}
+
+//Funcion para reiniciar el contador de estado de revision
+function reiniciarEstado($idAvion){
+  $conn=crearConexion();
+  $sql = "UPDATE aviones set estado_revision=0 where id=?";
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param('i', $idAvion);
+  if ($stmt->execute()){
+    echo '<div class="alert alert-success text-center">Revision Aceptada</div>';
+  }else {
+    echo '<div class="alert alert-warning text-center">No se ha podido confirmar la revision</div>';
+  }
+  $stmt->close();
+  $conn->close();
+}
+
+//Funcion para Eliminar la informacion añadida por el usuario y reiniciar el estado de revision
+function denegarRevision($idAvion){
+  $conn = crearConexion();
+  $sql = "UPDATE aviones SET descripcion_modificada = NULL, estado_revision = 0 WHERE id=?";
+  $stmt = $conn->prepare($sql);
+  $stmt ->bind_param('i', $idAvion);
+  if ($stmt->execute()){
+    echo '<div class="alert alert-success text-center">Revision Denegada</div>';
+  }else{
+    echo '<div class="alert alert-warning text-center">No se ha podido denegar la revision</div>';
+  }
+  $stmt ->close();
+  $conn ->close();
 }
 
 //Funcion para mostrar las busquedas en la pagina Admin
@@ -191,8 +206,8 @@ function mostrarBusquedasAdmin(){
               <td>" .$row['destino'].  "</td>
               <td>" .$row['modelo_avion'].  "</td>
               <td>
-                <button id='btnEliminarBusqueda' class='btn btn-danger' onclick='eliminarBusqueda(".$row['id_busquedas'].")'>
-                <span id='spinner' class='spinner-border spinner-border-sm d-none'></span>
+                <button id='btnEliminarBusqueda".$row['id_busquedas']."' class='btn btn-danger' onclick='eliminarBusqueda(".$row['id_busquedas'].")'>
+                <span id='spinner".$row['id_busquedas']."' class='spinner-border spinner-border-sm d-none'></span>
                 Eliminar
                 </button>
               </td>

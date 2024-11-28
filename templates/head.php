@@ -1,13 +1,29 @@
 <?php
 session_start();
+$titulosPaginas = [
+    'login.php' => 'Iniciar Sesión',
+    'registrar.php' => 'Registrar Cuenta',
+    'index.php' => 'Inicio',
+    'enciclopedia.php' => 'Enciclopedia de Aviones',
+    'detalleAvion.php' => 'Detalle de Aviones',
+    'avion.php' => 'Crea una avion',
+    'faqs.php' => 'Preguntas Frecuentes',
+    'vueloActual.php' => 'Vuelos en Tiempo Real',
+    'miCuenta.php' => 'Mi Cuenta',
+    'miCuentaAdmin.php' => 'Panel de Administración',
+    'indexAdmin.php' => 'Inicio Administrador'
+];
+$paginaActual = basename($_SERVER['PHP_SELF']);
+$titulosPaginas = isset($titulosPaginas[$paginaActual]) ? $titulosPaginas[$paginaActual] : 'Nombre Predeterminado';
 ?>
 <!DOCTYPE html>
 <html lang="es" data-bs-theme="light" id="html">
 <head>
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Conoce mas sobre los Aviones</title>
-  <link rel="stylesheet" href="/appTsa/css/styles.css">
+    <title><?php echo $titulosPaginas; ?></title>
+    <link rel="icon" href="/appTsa/img/logoTsA1.png" sizes="32x32" type="image/png">
+    <link rel="stylesheet" href="/appTsa/css/styles.css">
   <link rel="stylesheet" href="/appTsa/node_modules/bootstrap-icons/font/bootstrap-icons.css">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
   <script src="/appTsa/node_modules/jquery/dist/jquery.js"></script>

@@ -207,21 +207,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])&& $_POST['a
   session_start();
   if (isset($_POST['idAvion'])) {
     $id1 = ($_POST['idAvion']);
-    if (isset($_SESSION['usuario']) || isset($_SESSION['admin'])){
       if (isset($_SESSION['usuario'])){
         $usuario = $_SESSION['usuario'];
-      }elseif (isset($_SESSION['admin'])){
-        $usuario = $_SESSION['admin'];
+        $descripcionGuardada= $_POST['descripcionGuardada'];
+        $descripcion = $_POST['editDescripcion'];
+        $descripcionCompleta= $descripcionGuardada . "<br><h6>Informacion añadida por " .$usuario . "</h6>\n" . $descripcion;
+        editarAvion($id1, $descripcion, $descripcionCompleta, $usuario);
       }
-      $descripcionGuardada= $_POST['descripcionGuardada'];
-      $descripcion = $_POST['editDescripcion'];
-      $descripcionCompleta= $descripcionGuardada . "<br><h6>Informacion añadida por " .$usuario . "</h6>\n" . $descripcion;
-      editarAvion($id1, $descripcion, $descripcionCompleta);
-    }
+      elseif (isset($_SESSION['admin'])){
+        $admin = $_SESSION['admin'];
+        $descripcionGuardada= $_POST['descripcionGuardada'];
+        $descripcion = $_POST['editDescripcion'];
+        $descripcionCompleta= $descripcionGuardada . "<br><h6>Informacion añadida por " .$admin . "</h6>\n" . $descripcion;
+        editarAvion($id1, $descripcion, $descripcionCompleta, $admin);
+      }
     }else{
     echo '<div class=" alert alert-danger text-center" role="alert">no funciona la recepcion</div>';
     }
-
 }
 
 //Codigo para mostrar el auto completado en la busqueda de rutas

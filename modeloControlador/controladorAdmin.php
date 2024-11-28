@@ -37,6 +37,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
   eliminarBusqueda($idBusqueda);
 }
 
+//Funcion para mostrar en el modal la informacion añadida por el usuario para validarla
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'mostrarRevision'){
+  $idAvion = $_POST['idAvion'];
+  mostrarRevision($idAvion);
+}
+
+//Funcion para deshacer la informacion añadida por el usuario
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'denegarRevision'){
+  $idAvion = $_POST['idAvion'];
+  denegarRevision($idAvion);
+}
+
+//Funcion para revisar el avion y reiniciar el estado de revision del avion
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'revisarAvion') {
+  $idAvion = $_POST['idAvion'];
+  reiniciarEstado($idAvion);
+}
+
 //Aqui recibimos los datos del formulario para editar los datos de mi cuenta
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])&& $_POST['action'] === 'editarMiCuentaAdmin') {
   $conn = crearConexion();

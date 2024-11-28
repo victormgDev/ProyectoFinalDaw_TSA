@@ -226,17 +226,33 @@ function detalleAvion(){
       echo '<h3>Capacidad:</h3><p>'.htmlspecialchars($row["capacidad"]).' Pasajeros</p>';
       echo '<h3>Autonomia:</h3><p>'.htmlspecialchars($row["autonomia"]).' km</p>';
       echo '<h3>Velocidad Maxima:</h3><p>'.htmlspecialchars($row["velocidad_maxima"]).' km/h</p>';
+      echo '<h3>Codigos ICAO:</h3><p>'.htmlspecialchars($row["codigos_iata"]).'</p>';
     }else{
       echo '<div class=" alert alert-danger text-center" role="alert">Avion no encontrado</div>';
     }
-    if (isset($_SESSION['usuario'])|| isset($_SESSION['admin'])){
+    if (isset($_SESSION['usuario'])){
       echo '<div class="col-10 mt-0">';
       echo '<div class="row mb-3">';
-      echo '<form id="formEditAvion" class="form-control" method="post">';
-      echo '<label for="editDescripcion" class="form-label">Editar Informacion Añadida</label>';
-      echo '<textarea class="form-control" id="editDescripcion" name="editDescripcion" rows="5">'.htmlspecialchars($row['descripcion_modificada']) .'</textarea>';
+      if ($row['estado_revision']==0){
+        echo '<form id="formEditAvion" class="form-control" method="post">';
+        echo '<label for="editDescripcion" class="form-label">Editar Informacion Añadida</label>';
+        echo '<textarea class="form-control" id="editDescripcion" name="editDescripcion" rows="5"></textarea>';
+        echo '</div>';
+        echo '<button type="submit" class="btn btn-outline-primary" id="editAvion" name="editAvion" onclick="editarAvion('.$_GET['id'].')">Guardar Cambios</button>';
+      }else{
+        echo '<button type="submit" class="btn btn-outline-primary" disabled id="editAvion" name="editAvion" onclick="editarAvion('.$_GET['id'].')">Revisando</button>';
+      }
+      echo '</form>';
       echo '</div>';
-      echo '<button type="submit" class="btn btn-outline-primary" id="editAvion" name="editAvion" onclick="editarAvion('.$_GET['id'].')">Guardar Cambios</button>';
+    }
+    if (isset($_SESSION['admin'])){
+      echo '<div class="col-10 mt-0">';
+      echo '<div class="row mb-3">';
+        echo '<form id="formEditAvion" class="form-control" method="post">';
+        echo '<label for="editDescripcion" class="form-label">Editar Informacion Añadida</label>';
+        echo '<textarea class="form-control" id="editDescripcion" name="editDescripcion" rows="5">'. htmlspecialchars($row["descripcion_modificada"]) .' </textarea>';
+        echo '</div>';
+        echo '<button type="submit" class="btn btn-outline-primary" id="editAvion" name="editAvion" onclick="editarAvion('.$_GET['id'].')">Guardar Cambios</button>';
       echo '</form>';
       echo '</div>';
     }
@@ -244,17 +260,33 @@ function detalleAvion(){
 }
 
 //Funcion para guardar la modificacion de editar avion
-function editarAvion($id1,$descripcion, $descripcionCompleta){
+function editarAvion($id1,$descripcion, $descripcionCompleta, $usuario){
   $conn = crearConexion();
-  $sql1 = "UPDATE aviones SET descripcion_modificada = ? WHERE id=?";
-  $stmt1 = $conn->prepare($sql1);
-  $stmt1->bind_param("si", $descripcion, $id1);
-  if ($stmt1->execute()) {
-    echo '<div class=" alert alert-success text-center" role="alert">Avion editado Correctamente</div>';
-    echo '<h3>Descripcion:</h3><p>Descripcion: '.$descripcionCompleta.'</p>';
-  }else{
-    echo '<div class=" alert alert-danger text-center" role="alert">Error al editar el avion</div>';
+  if (isset($_SESSION['usuario'])){
+    $sql1 = "UPDATE aviones SET descripcion_modificada = CONCAT(IFNULL(descripcion_modificada, ''), ' ' ,?), estado_revision =1 WHERE id=?";
+    $stmt1 = $conn->prepare($sql1);
+    $stmt1->bind_param("si", $descripcion, $id1);
+    if ($stmt1->execute()) {
+      echo '<div class=" alert alert-success text-center" role="alert">Avion editado Correctamente</div>';
+      echo '<h3>Descripcion:</h3><p>Descripcion: '.htmlspecialchars($descripcionCompleta).'</p>';
+    }else{
+      echo '<div class=" alert alert-danger text-center" role="alert">Error al editar el avion</div>';
+    }
   }
+
+  if (isset($_SESSION['admin'])){
+    $sql1 = "UPDATE aviones SET descripcion_modificada = ?, estado_revision =0 WHERE id=?";
+    $stmt1 = $conn->prepare($sql1);
+    $stmt1->bind_param("si", $descripcion, $id1);
+    if ($stmt1->execute()) {
+      echo '<div class=" alert alert-success text-center" role="alert">Avion editado Correctamente</div>';
+      echo '<h3>Descripcion:</h3><p>Descripcion: '.htmlspecialchars($descripcionCompleta).'</p>';
+    }else{
+      echo '<div class=" alert alert-danger text-center" role="alert">Error al editar el avion</div>';
+    }
+  }
+  $stmt1->close();
+  $conn->close();
 }
 
 //Funcion para mostrar autocompletado en el input Origen y Destino

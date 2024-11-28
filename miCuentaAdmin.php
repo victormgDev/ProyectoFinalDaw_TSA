@@ -16,20 +16,29 @@ include 'templates/head.php';
       <div id="alertFormMiCuentaAdmin" aria-label="Div para alertas en la modificacion"></div>
       <div class="form-floating col">
         <h3 class="text-center mt-2">Editar Datos</h3>
-        <form id="formEditarMiCuentaAdmin" method="POST" onsubmit="editarMiCuentaAdmin(<?php echo $_SESSION['idAdmin']; ?>); return false;" >
+        <form id="formEditarMiCuentaAdmin" class="needs-validation" novalidate aria-label="Formulario editar Cuenta Admin" method="POST" onsubmit="editarMiCuentaAdmin(<?php echo $_SESSION['idAdmin']; ?>); return false;" >
           <div class="form-floating mb-3">
             <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Nombre de usuario" required>
             <label for="usuario" class="form-label">Nombre</label>
+              <div class="invalid-feedback" aria-label="Condiciones de Usuario Admin">
+                  El usuario administrador debe de empezar por minimo 4 letras y le puede seguir un numero
+              </div>
           </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control " id="email" name="email" placeholder="Usuario@tsa.com" required>
+                <label for="email" class="form-label" >Usuario@tsa.com</label>
+                <div class="invalid-feedback" aria-label="Condiciones Email Admin">
+                    El email debe comenzar por letra minuscula seguido de @tsa.com
+                </div>
+            </div>
           <div class="form-floating mb-3">
             <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
             <label for="password" class="form-label">Contraseña</label>
+              <div class="invalid-feedback" aria-label="Condiciones Contraseña Admin">
+                  La contraseña debe tener al menos 6 caracteres, incluyendo letras o números.
+              </div>
           </div>
-          <div class="form-floating mb-3">
-            <input type="email" class="form-control " id="email" name="email" placeholder="Usuario@tsa.com" required>
-            <label for="email" class="form-label" >Usuario@tsa.com</label>
-          </div>
-          <button type="submit" class="btn btn-outline-primary w-25 mx-auto d-block mb-3">Guardar</button>
+          <button type="submit" id="guardarAdmin" class="btn btn-outline-primary w-25 mx-auto d-block mb-3">Guardar</button>
         </form>
       </div>
     </div>

@@ -1,8 +1,7 @@
+<title>Detalle de Avion</title>
 <?php
 include 'modeloControlador/controlador.php';
 include 'templates/head.php';
-$conn = crearConexion();
-
 ?>
 <script src="https://cdn.jsdelivr.net/npm/bad-words"></script>
 <div class="container-fluid mt-5" aria-label="Detalles de Avion">
