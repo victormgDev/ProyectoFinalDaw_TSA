@@ -139,7 +139,7 @@ function crearAvionBusqueda($fabricante, $modelo, $descripcion, $capacidad, $alc
           $sql= "INSERT INTO aviones (fabricante, modelo, capacidad, velocidad_maxima, autonomia, descripcion, imagen_url, id_usuario, codigos_iata) values (?,?,?,?,?,?,?,?,?)";
           $stmt = $conn->prepare($sql);
           $stmt->bind_param("ssiiissis", $fabricante, $modelo, $capacidad, $velocidad, $alcance, $descripcion, $url, $idUsuario, $codigosIata);
-        }else{
+        }else{//si crea un admin un avion utilizamos esta sentencia
           $sql= "INSERT INTO aviones (fabricante, modelo, capacidad, velocidad_maxima, autonomia, descripcion, imagen_url, id_admin, codigos_iata) values (?,?,?,?,?,?,?,?,?)";
           $stmt = $conn->prepare($sql);
           $stmt->bind_param("ssiiissis", $fabricante, $modelo, $capacidad, $velocidad, $alcance, $descripcion, $url, $idUsuario, $codigosIata);

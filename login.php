@@ -17,16 +17,14 @@ include 'templates/head.php';
           <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
           <label for="password" class="form-label">Contraseña</label>
         </div>
-        <button type="submit" class="btn btn-outline-primary w-100" onclick="iniciarSesion()">Iniciar Sesión</button>
+        <button type="submit" class="btn btn-outline-primary w-100" onclick="iniciarSesion()" aria-label="Boton iniciar sesion">Iniciar Sesión</button>
       </form>
       <div class="text-center mt-3">
-        <a href="/appTsa/registrar.php" class="btn btn-outline-primary w-100">Registrarse</a>
+        <a href="/appTsa/registrar.php" class="btn btn-outline-primary w-100" aria-label="Boton Registrar">Registrarse</a>
       </div>
     </div>
   </div>
-  <script src="/appTsa/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
 </div>
 <script src="/appTsa/js/app.js"></script>
-
-
 <?php include 'templates/footer.php'; ?>

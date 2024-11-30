@@ -5,42 +5,42 @@ include 'modeloControlador/controladorAdmin.php';
 if (isset($_SESSION['admin'])){
   echo'
     <div class="container-fluid">
-        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true" aria-label="Confimacion de eliminar usuario o bosquedas">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="confirmModalLabel">Confirmación</h5>
-                <button type="button" class="close" id="btnCerrarModal" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" id="btnCerrarModal" data-dismiss="modal" aria-label="Cerrar ventana">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div class="modal-body" aria-label="Confirmar ventana">
                 ¿Estás seguro de que quieres eliminar?
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="cancelarEliminar" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" id="confirmarEliminar">Eliminar</button>
+                <button type="button" class="btn btn-secondary" id="cancelarEliminar" data-dismiss="modal" aria-label="Boton Cancelar">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmarEliminar" aria-label="Boton eliminar">Eliminar</button>
               </div>
             </div>
           </div>
         </div>
         
-        <div class="modal fade" id="confirmModalRevisar" tabindex="-1" role="dialog" aria-labelledby="confirmModalRevisarLabel" aria-hidden="true">
+        <div class="modal fade" id="confirmModalRevisar" tabindex="-1" role="dialog" aria-labelledby="confirmModalRevisarLabel" aria-hidden="true" aria-label="Confirmar Cambios en aviones">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="confirmModalLabel">Revision</h5>
-                <button type="button" class="close" id="btnCerrarRevision" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" id="btnCerrarRevision" data-dismiss="modal" aria-label="Cerrar ventana">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                <div id="revInfoAvion"></div>
+                <div id="revInfoAvion" aria-label="Informacion a revisar"></div>
               </div>
               <div class="modal-footer">
-              <button type="button" class="btn btn-success" id="confirmarRevision">Validar</button>
-              <button type="button" class="btn btn-warning" id="modificarRevision">Modificar</button>
-                <button type="button" class="btn btn-danger" id="denegarRevision" data-dismiss="modal">Denegar</button>
+              <button type="button" class="btn btn-success" id="confirmarRevision" aria-label="Boton Validar">Validar</button>
+              <button type="button" class="btn btn-warning" id="modificarRevision" aria-label="Boton Modificar">Modificar</button>
+                <button type="button" class="btn btn-danger" id="denegarRevision" data-dismiss="modal" aria-label="Boton Denegar">Denegar</button>
                 
               </div>
             </div>
@@ -51,8 +51,8 @@ if (isset($_SESSION['admin'])){
     <div class="row justify-content-center">
         <div class="col-9 ">
             <h3 class="text-center border-bottom">Usuarios</h3>
-            <div id="alertUsuariosMostrados"> </div>
-            <table class="table table-hover ">
+            <div id="alertUsuariosMostrados" aria-label="alertas Usuarios"> </div>
+            <table class="table table-hover" aria-label="Tabla usuarios">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -70,8 +70,8 @@ if (isset($_SESSION['admin'])){
     <div class="row justify-content-center">
         <div class="col-9">
             <h3 class="text-center border-bottom mt-5">Aviones</h3>
-            <div id="alertAvionesMostrados"></div>
-            <table class="table table-hover ">
+            <div id="alertAvionesMostrados" aria-label="Alertas aviones"></div>
+            <table class="table table-hover" aria-label="tabla aviones">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -91,8 +91,8 @@ if (isset($_SESSION['admin'])){
         <div class="col-9">
 
             <h3 class="text-center border-bottom mt-5">Busquedas mostradas en Mapa</h3>
-            <div id="alertBusquedasMostradas"></div>
-            <table class="table table-hover ">
+            <div id="alertBusquedasMostradas" aria-label="Alertas busquedas"></div>
+            <table class="table table-hover" aria-label="tabla busquedas">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
