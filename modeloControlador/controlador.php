@@ -305,7 +305,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
 
 //Aqui recibimos los datos del formulario para editar los datos de mi cuenta
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])&& $_POST['action'] === 'editarMiCuenta') {
-  $conn = crearConexion();
   $idUsuario = $_POST['idUsuario'];
   $usuario = $_POST['usuarioEdit'];
   $password = password_hash($_POST['passwordEdit'], PASSWORD_BCRYPT);

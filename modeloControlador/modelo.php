@@ -136,7 +136,7 @@ function crearAvionBusqueda($fabricante, $modelo, $descripcion, $capacidad, $alc
       if (move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaImagen)) {
         //Consulta Sql
         if (isset($_SESSION['id'])){
-          $sql= "INSERT INTO aviones (fabricante, modelo, capacidad, velocidad_maxima, autonomia, descripcion, imagen_url, id_usuario, codigos_iata) values (?,?,?,?,?,?,?,?,?)";
+          $sql= "INSERT INTO aviones (fabricante, modelo, capacidad, velocidad_maxima, autonomia, descripcion, imagen_url, id_usuario, codigos_iata, estado_revision) values (?,?,?,?,?,?,?,?,?,2)";
           $stmt = $conn->prepare($sql);
           $stmt->bind_param("ssiiissis", $fabricante, $modelo, $capacidad, $velocidad, $alcance, $descripcion, $url, $idUsuario, $codigosIata);
         }else{//si crea un admin un avion utilizamos esta sentencia
@@ -164,10 +164,10 @@ function mostrarAviones($consulta, $orden,$direccion){
   $conn = crearConexion();
   // Si no introducimos ninguna consulta en en el inseert, mostramos todos los aviones
   if ($consulta === '') {
-    $sql = "SELECT * FROM aviones ORDER BY $orden $direccion";
+    $sql = "SELECT * FROM aviones WHERE estado_revision=0 OR estado_revision=1 ORDER BY $orden $direccion";
     $stmt = $conn->prepare($sql);
   } else {
-    $sql = "SELECT * FROM aviones WHERE fabricante LIKE ? OR modelo LIKE ? ORDER BY $orden $direccion";
+    $sql = "SELECT * FROM aviones WHERE fabricante LIKE ? OR modelo LIKE ? OR estado_revision=0 OR estado_revision=1 ORDER BY $orden $direccion";
     $stmt = $conn->prepare($sql);
     $terminoBusqueda = '%' . $consulta . '%';
     $stmt->bind_param("ss", $terminoBusqueda, $terminoBusqueda);
@@ -635,6 +635,9 @@ function comprobarEmail($idUsuario, $usuario,$email, $password){
   if ($result->num_rows > 0){
     echo '<div class="alert alert-danger text-center mt-3" role="alert">El email ya existe</div>';
   }else{
+    unset($_SESSION['usuario']);
+    session_start();
+    $_SESSION['usuario']=$usuario;
     $sql = "UPDATE usuarios SET usuario=?, password=?, email=? WHERE id=?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssi", $usuario, $password, $email, $idUsuario);
@@ -678,6 +681,5 @@ function mostrarMisConsultas($idUsuario){
   }
   echo '<div class="row justify-content-center" id="avionRuta"></div>';
 }
-
 
 ?>

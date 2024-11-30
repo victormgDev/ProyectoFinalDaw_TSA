@@ -645,7 +645,8 @@ function modificarAvion(id){
 
 //Funcion para revisar la informacion añadida
 function revisarAvion(idAvion){
-  var boton =  document.getElementById('btnRevisarAvion'+idAvion);
+  var botonRev =  document.getElementById('btnRevisarAvion'+idAvion);
+  var botonNuevo =document.getElementById('btnRevisarNuevoAvion'+idAvion);
   $('#confirmModalRevisar').modal('show');
   document.getElementById('modificarRevision').addEventListener('click', function (){
     window.location.href = '/appTsa/detalleAvion.php?id='+idAvion;
@@ -686,12 +687,11 @@ function revisarAvion(idAvion){
         })
         .catch(error => {
           console.error('Error al denegar la revision', error);
-          boton.disabled=false;
+          botonRev.disabled=false;
         });
   });
   document.getElementById('confirmarRevision').addEventListener('click', function (){
     $('#confirmModal').modal('hide');
-    boton.disabled=true;
     fetch('modeloControlador/controladorAdmin.php', {
       method: 'POST',
       body: new URLSearchParams({
@@ -708,7 +708,8 @@ function revisarAvion(idAvion){
         })
         .catch(error => {
           console.error('Error al confirmar la revision', error);
-          boton.disabled=false;
+          botonRev.disabled=false;
+          botonNuevo.disabled=false;
         });
   });
 }

@@ -104,6 +104,10 @@ function mostrarAvionesAdmin(){
                   echo "
                   <button id='btnRevisarAvion".$row['id']."' class='btn btn-warning' onclick='revisarAvion(".$row['id'].")'>Revisar</button>
                   ";
+                }elseif ($row['estado_revision'] == 2){
+                  echo "
+                  <button id='btnRevisarNuevoAvion".$row['id']."' class='btn btn-warning' onclick='revisarAvion(".$row['id'].")'>Nuevo</button>
+                  ";
                 }
       echo "
               </td>
@@ -132,7 +136,7 @@ function eliminarAvion($idAvion){
 //Funcion para mostrar la informacion añadida por el usuario en el modal de confirmacion
 function mostrarRevision($idAvion){
   $conn= crearConexion();
-  $sql = "SELECT descripcion_modificada FROM aviones WHERE id=?";
+  $sql = "SELECT descripcion_modificada, estado_revision FROM aviones WHERE id=?";
   $stmt = $conn->prepare($sql);
   $stmt->bind_param('i', $idAvion);
   $stmt->execute();
@@ -140,9 +144,15 @@ function mostrarRevision($idAvion){
 
   if ($result->num_rows>0){
     $row = $result->fetch_assoc();
+    if ($row['estado_revision'] == 1){
       echo "
       <p>" . htmlspecialchars($row['descripcion_modificada']) . "</p>
       ";
+    }elseif ($row['estado_revision'] == 2){
+      echo "
+      <p>¡¡Nuevo Avion!! Comprobar en Enciclopedia</p>
+      ";
+    }
   }else{
     echo "
     <p> No ha recuperado informacion añadida del avion con ID: " . $idAvion ."</p>
@@ -170,15 +180,30 @@ function reiniciarEstado($idAvion){
 //Funcion para Eliminar la informacion añadida por el usuario y reiniciar el estado de revision
 function denegarRevision($idAvion){
   $conn = crearConexion();
-  $sql = "UPDATE aviones SET descripcion_modificada = NULL, estado_revision = 0 WHERE id=?";
+  //Comprobamos el estado de revision para denegar la informacion o eliminar el avion añadido
+  $sql = "SELECT estado_revision FROM aviones WHERE id=?";
   $stmt = $conn->prepare($sql);
-  $stmt ->bind_param('i', $idAvion);
-  if ($stmt->execute()){
-    echo '<div class="alert alert-success text-center">Revision Denegada</div>';
-  }else{
-    echo '<div class="alert alert-warning text-center">No se ha podido denegar la revision</div>';
+  $stmt->bind_param('i', $idAvion);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  if ($result->num_rows>0){
+    $row = $result->fetch_assoc();
+    if ($row['estado_revision']==1){ //Si se a añadido informacion tiene el estado 1
+      $sql1  = "UPDATE aviones SET descripcion_modificada = NULL, estado_revision = 0 WHERE id=?";
+      $stmt1 = $conn->prepare($sql1 );
+      $stmt1 ->bind_param('i', $idAvion);
+      if ($stmt1->execute()){
+        echo '<div class="alert alert-success text-center">Revision Denegada</div>';
+      }else{
+        echo '<div class="alert alert-warning text-center">No se ha podido denegar la revision</div>';
+      }
+    }elseif ($row['estado_revision']==2){
+      eliminarAvion($idAvion);
+    }
   }
-  $stmt ->close();
+
+  $stmt1 ->close();
+  $stmt->close();
   $conn ->close();
 }
 
