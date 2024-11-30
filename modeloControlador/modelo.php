@@ -293,7 +293,7 @@ function editarAvion($id1,$descripcion, $descripcionCompleta, $usuario){
 function autocompletarOrigen($autoCompletar){
   $conn = crearConexion();
 
-  $sql = "select * from aeropuertos where iata like ? or nombre like ? or ciudad like ? or icao like ? limit 5";
+  $sql = "select * from aeropuertos where iata like ? or nombre like ? or ciudad like ? or icao like ? limit 8";
   $stmt = $conn->prepare($sql);
   $busqueda = "%$autoCompletar%";
   $stmt->bind_param("ssss", $busqueda, $busqueda, $busqueda, $busqueda);
@@ -303,7 +303,7 @@ function autocompletarOrigen($autoCompletar){
   //generamos la lista de resultados
   if ($result->num_rows > 0){
     while($row = $result->fetch_assoc()){
-      echo '<li class="list-group-item origen" data-iata="' . htmlspecialchars($row['iata']).'">' .htmlspecialchars($row['iata']). ' - ' .htmlspecialchars($row['nombre']).'</li>';
+      echo '<li class="list-group-item origen" data-iata="' . htmlspecialchars($row['iata']).'">' .htmlspecialchars($row['iata']). ' - ' .htmlspecialchars($row['nombre']). ' - ' . htmlspecialchars($row['ciudad']).'</li>';
     }
 
   }else{
@@ -316,7 +316,7 @@ function autocompletarOrigen($autoCompletar){
 function autocompletarDestino($autoCompletar){
   $conn = crearConexion();
   //sentencia SQL
-  $sql = "select iata, nombre from aeropuertos where iata like ? or nombre like ? or ciudad like ? or icao like ? limit 5";
+  $sql = "select * from aeropuertos where iata like ? or nombre like ? or ciudad like ? or icao like ? limit 8";
   $stmt = $conn->prepare($sql);
   $busqueda = "%$autoCompletar%";
   $stmt->bind_param("ssss", $busqueda, $busqueda, $busqueda, $busqueda);
@@ -327,7 +327,7 @@ function autocompletarDestino($autoCompletar){
   if ($result->num_rows > 0){
 
     while($row = $result->fetch_assoc()){
-      echo '<li class="list-group-item destino" data-iata="' . htmlspecialchars($row['iata']).'">' .htmlspecialchars($row['iata']). ' - ' .htmlspecialchars($row['nombre']).'</li>';
+      echo '<li class="list-group-item destino" data-iata="' . htmlspecialchars($row['iata']).'">' .htmlspecialchars($row['iata']). ' - ' .htmlspecialchars($row['nombre']). ' - ' . htmlspecialchars($row['ciudad']).'</li>';
     }
 
   }else{
