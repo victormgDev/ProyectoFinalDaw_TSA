@@ -119,7 +119,6 @@ if (isset($_SESSION['admin'])){
   echo '<div class="alert alert-warning">Inicia session como administrador</div>';
 }
 ?>
-<script src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 
 <?php
 include 'templates/footer.php';
