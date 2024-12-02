@@ -220,7 +220,7 @@ function crearAvionBusqueda(){
 }
 
 //Funcion para mostrar aviones con datos recibidos de enciclopedia.php y enviamos datos a controlador.php para que nos devuelva la informacion
-function mostrarAviones() {
+function mostrarAviones(event) {
   event.preventDefault();
   //Guardamos en variable los datos del formulario a traves del id del formulario
   let form =document.querySelector('#formBusquedaAviones');

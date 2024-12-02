@@ -166,13 +166,12 @@ function mostrarAviones($consulta, $orden,$direccion){
   if ($consulta === '') {
     $sql = "SELECT * FROM aviones WHERE estado_revision=0 OR estado_revision=1 ORDER BY $orden $direccion";
     $stmt = $conn->prepare($sql);
-  } else {
-    $sql = "SELECT * FROM aviones WHERE fabricante LIKE ? OR modelo LIKE ? OR estado_revision=0 OR estado_revision=1 ORDER BY $orden $direccion";
+  } elseif (!empty($consulta)) {
+    $sql = "SELECT * FROM aviones WHERE (fabricante LIKE ? OR modelo LIKE ?) AND (estado_revision=0 OR estado_revision=1) ORDER BY $orden $direccion";
     $stmt = $conn->prepare($sql);
     $terminoBusqueda = '%' . $consulta . '%';
     $stmt->bind_param("ss", $terminoBusqueda, $terminoBusqueda);
   }
-
   $stmt->execute();
   $result = $stmt->get_result();
 

@@ -26,7 +26,7 @@ include 'templates/head.php';
           <option value="ASC">Ascendente</option>
           <option value="DESC">Descendente</option>
         </select>
-        <button class="btn btn-outline-primary" type="button" id="filtrarAviones" onclick="mostrarAviones()" aria-label="Boton para buscar avion">Buscar</button>
+        <button class="btn btn-outline-primary" type="button" id="filtrarAviones" onclick="mostrarAviones(event)" aria-label="Boton para buscar avion">Buscar</button>
       </form>
     </div>
   </div>
