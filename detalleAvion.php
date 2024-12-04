@@ -1,4 +1,4 @@
-<title>Detalle de Avion</title>
+
 <?php
 include 'modeloControlador/controlador.php';
 include 'templates/head.php';

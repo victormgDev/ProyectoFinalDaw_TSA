@@ -157,6 +157,9 @@ function crearAvionBusqueda($fabricante, $modelo, $descripcion, $capacidad, $alc
       echo "<div class='alert alert-warning text-center' role='alert'>Desbes subir una imagen</div>";
     }
   }
+    $stmt->close();
+    $stmt1->close();
+    $conn->close();
 }
 
 //Funcion para msotrar los aviones en la pagina enciclopedia
@@ -256,6 +259,8 @@ function detalleAvion(){
       echo '</div>';
     }
   }
+  $stmt->close();
+  $conn->close();
 }
 
 //Funcion para guardar la modificacion de editar avion
@@ -465,6 +470,8 @@ function mostrarRutas($origen, $destino){
                         No se han encontrado rutas
                       </div>';;
   }
+  $stmt1->close();
+  $conn->close();
 }
 
 //Funcion para mostrar la informacion del avion en la busqueda
@@ -486,6 +493,8 @@ function mostrarInfoAvion($iata){
   }else {
     echo '<div class=" alert alert-danger text-center" role="alert">Avion no encontrado</div>';
   }
+  $stmt->close();
+  $conn->close();
 }
 
 //Funcion para Guardar la busqueda sin mostrar en el mapa
@@ -621,6 +630,8 @@ function mostrarMiCuenta(){
   }else{
     echo '<div class=" alert alert-danger text-center" role="alert">Usuario no encontrado</div>';
   }
+  $stmt->close();
+  $conn->close();
 }
 
 //Funcion para comporbar si existe el email introducido para ver si se puede modificar
@@ -647,7 +658,9 @@ function comprobarEmail($idUsuario, $usuario,$email, $password){
       echo '<div class=" alert alert-danger text-center" role="alert">Error al editar datos</div>';
     }
   }
-
+  $stmt->close();
+  $stmt1->close();
+  $conn->close();
 }
 
 //Funcion para mostrar las consultas de vuelos en la pagina miCuenta.php
@@ -679,6 +692,8 @@ function mostrarMisConsultas($idUsuario){
     echo '<tr><td colspan="5">Aun no has realizado ninguna Busqueda</td></tr>';
   }
   echo '<div class="row justify-content-center" id="avionRuta"></div>';
+  $stmt->close();
+  $conn->close();
 }
 
 ?>

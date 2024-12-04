@@ -290,6 +290,8 @@ function mostrarDatosAdmin($idAdmin){
       echo '<div class=" alert alert-danger text-center" role="alert">Usuario no encontrado</div>';
     }
   }
+  $stmt->close();
+  $conn->close();
 }
 
 function comprobarEmailAdmin($idAdmin, $usuario,$email, $password){
@@ -312,7 +314,9 @@ function comprobarEmailAdmin($idAdmin, $usuario,$email, $password){
       echo '<div class=" alert alert-danger text-center" role="alert">Error al editar datos</div>';
     }
   }
-
+  $stmt->close();
+  $stmt1->close();
+  $conn->close();
 }
 
 ?>
