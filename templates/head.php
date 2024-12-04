@@ -14,7 +14,7 @@ $titulosPaginas = [
     'indexAdmin.php' => 'Inicio Administrador'
 ];
 $paginaActual = basename($_SERVER['PHP_SELF']);
-$titulosPaginas = isset($titulosPaginas[$paginaActual]) ? $titulosPaginas[$paginaActual] : 'Nombre Predeterminado';
+$titulosPaginas = isset($titulosPaginas[$paginaActual]) ? $titulosPaginas[$paginaActual] : 'Tsa';
 ?>
 <!DOCTYPE html>
 <html lang="es" data-bs-theme="light" id="html">
