@@ -24,10 +24,9 @@ $titulosPaginas = isset($titulosPaginas[$paginaActual]) ? $titulosPaginas[$pagin
     <title><?php echo $titulosPaginas; ?></title>
     <link rel="icon" href="/appTsa/img/logoTsA1.png" sizes="32x32" type="image/png">
     <link rel="stylesheet" href="/appTsa/css/styles.css">
-  <link rel="stylesheet" href="/appTsa/node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
-  <script src="/appTsa/node_modules/jquery/dist/jquery.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
 <body >
@@ -124,7 +123,7 @@ $titulosPaginas = isset($titulosPaginas[$paginaActual]) ? $titulosPaginas[$pagin
   </div>
 </nav>
 <script src="/appTsa/js/app.js"  ></script>
-<script src="/appTsa/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
