@@ -4,3 +4,11 @@
 node_modules
 dist
 .cache
+.idea
+*.sql
+package-lock.json
+.env
+correo.env
+.DS_Store
+Thumbs.db
+.gitattributes
