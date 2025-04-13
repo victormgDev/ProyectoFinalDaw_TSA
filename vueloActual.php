@@ -11,7 +11,7 @@ if ($idUsuario = existeUsuario()) {
         <h1 class="text-center animate__animated animate__flip">Mapa para tu vuelo en Tiempo Real</h1>
                 <div class="col-8">
                     <div id="map" style="height: 500px;  width: 100%;"aria-label="Mapa interactivo para visualizar el avion en tiempo real">
-                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl4vk039FPjcdPlIDjZ3dQutSH_bMnuqI&callback=initMap" async defer></script>
+                    <script src="https://maps.googleapis.com/maps/api/js?key=TU_CLAVE_API&callback=initMap" async defer></script>
                     </div>
                 </div>
                 <div class="col-4">
