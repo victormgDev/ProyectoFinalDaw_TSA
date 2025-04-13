@@ -33,6 +33,7 @@ cd todo-aviones
 ````
 2. Asegurate de tener Xampp preparado con Apache y MySQL, Copia los archivos en la carpeta htdocs de Xampp, importa la base de datos desde PHPmyAdmin, configura tu usuario en base al archivo conexion.php y conexionAdmin.php
 3. Accede desde tu navegador a localhost/directiorio/index.php
+4. IMPORTANTE PAR VISUALIZAR EL MAPA DE GOOGLE MAPS, NECESITAS CAMBIAR EN EL ARCHIVO vueloActual.php, la Api Key de google por una propia.
 
 # 📄 Licencia
 Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para más información.
