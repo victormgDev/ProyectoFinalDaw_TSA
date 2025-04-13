@@ -24,6 +24,22 @@ Proyecto web interactivo que muestra información detallada y en tiempo real sob
 - Bootstrap (estilos y componentes UI)
 
 
+## 📦 Instalación y uso
+
+1. Clona este repositorio:
+```bash
+git clone https://github.com/victormontes/todo-aviones.git
+cd todo-aviones
+````
+2. Asegurate de tener Xampp preparado con Apache y MySQL, Copia los archivos en la carpeta htdocs de Xampp, importa la base de datos desde PHPmyAdmin, configura tu usuario en base al archivo conexion.php y conexionAdmin.php
+3. Accede desde tu navegador a localhost/directiorio/index.php
+
+# 📄 Licencia
+Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para más información.
+
+
+
+
 
 
 
